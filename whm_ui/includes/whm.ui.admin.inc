@@ -31,16 +31,16 @@ function whm_ui_list_accounts_form() {
       );
       if ($user_can_suspend) {
         if ($acct['suspended']) {
-          $operations = l(t('Unsuspend'), "admin/settings/whm/accounts/account/{$acct['user']}/unsuspend");
+          $operations = l(t('Unsuspend'), "admin/whm/accounts/account/{$acct['user']}/unsuspend");
         } else {
-          $operations = l(t('Suspend'), "admin/settings/whm/accounts/account/{$acct['user']}/suspend");
+          $operations = l(t('Suspend'), "admin/whm/accounts/account/{$acct['user']}/suspend");
         }
       }
       if ($user_can_terminate) {
-        $operations .= ' ' . l(t('Terminate'), "admin/settings/whm/accounts/account/{$acct['user']}/terminate");
+        $operations .= ' ' . l(t('Terminate'), "admin/whm/accounts/account/{$acct['user']}/terminate");
       }
       if ($user_can_edit) {
-        $operations .= ' ' . l(t('Edit'), "admin/settings/whm/accounts/account/{$acct['user']}/edit");
+        $operations .= ' ' . l(t('Edit'), "admin/whm/accounts/account/{$acct['user']}/edit");
       }
       if ($user_can_suspend || $user_can_terminate || $user_can_edit) {
         $row[] = $operations;
@@ -252,7 +252,7 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
   ));
   if ($rv === Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />', array('%user' => $user, '%domain' => $domain, '%plan' => $plan)));
-    $form_values['redirect'] = 'admin/settings/whm/accounts/list';
+    $form_values['redirect'] = 'admin/whm/accounts/list';
     return;
   }
   else {
@@ -392,14 +392,14 @@ function whm_ui_edit_account_form_submit($form_id, &$form_values) {
     if (empty($new_pass)) {
       drupal_set_message(t('Account %user was not updated. No updated values were provided.', array('%user' => $current_user)));
     }
-    $form_values['redirect'] = 'admin/settings/whm/accounts/list';
+    $form_values['redirect'] = 'admin/whm/accounts/list';
     return;
   }
 
   $rv = whm_create_account($current_user, $changed);
   if ($rv === Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully updated account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i>', array('%user' => $new_user, '%domain' => $new_domain)));
-    $form_values['redirect'] = 'admin/settings/whm/accounts/list';
+    $form_values['redirect'] = 'admin/whm/accounts/list';
     return;
   }
   elseif ($rv === Constant::WHM_USERNAME_TAKEN) {
@@ -421,7 +421,7 @@ function whm_ui_confirm_suspend_account(&$form_state, $account) {
     t('Are you sure you want to suspend the WHM account for %name?', 
       array('%name' => $account)
     ),
-    'admin/settings/whm/accounts/list',
+    'admin/whm/accounts/list',
     t('The user account that this WHM account belongs to will no longer be able to access the site management tools.'),
     t('Suspend'), 
     t('Cancel')
@@ -436,7 +436,7 @@ function whm_ui_confirm_suspend_account_submit($form, &$form_state) {
   drupal_set_message(t('WHM account %name has been suspended.', array('%name' => $form_state['values']['_whm_account'])));
 
   if (!isset($_REQUEST['destination'])) {
-    $form_state['redirect'] = 'admin/settings/whm/accounts/list';
+    $form_state['redirect'] = 'admin/whm/accounts/list';
   }
 }
 
@@ -450,7 +450,7 @@ function whm_ui_confirm_unsuspend_account(&$form_state, $account) {
     t('Are you sure you want to unsuspend the WHM account %name?', 
       array('%name' => $account)
     ),
-    'admin/settings/whm/accounts/list',
+    'admin/whm/accounts/list',
     '',
     t('Unsuspend'), 
     t('Cancel')
@@ -465,7 +465,7 @@ function whm_ui_confirm_unsuspend_account_submit($form, &$form_state) {
   drupal_set_message(t('WHM account %name has been unsuspended.', array('%name' => $form_state['values']['_whm_account'])));
 
   if (!isset($_REQUEST['destination'])) {
-    $form_state['redirect'] = 'admin/settings/whm/accounts/list';
+    $form_state['redirect'] = 'admin/whm/accounts/list';
   }
 }
 
@@ -479,7 +479,7 @@ function whm_ui_confirm_terminate_account(&$form_state, $account) {
     t('Are you sure you want to terminate the WHM account %name?', 
       array('%name' => $account)
     ),
-    'admin/settings/whm/accounts/list',
+    'admin/whm/accounts/list',
     t('This action is not reversible.'),
     t('Terminate'), 
     t('Cancel')
@@ -494,7 +494,7 @@ function whm_ui_confirm_terminate_account_submit($form, &$form_state) {
   drupal_set_message(t('WHM account %name has been terminated.', array('%name' => $form_state['values']['_whm_account'])));
 
   if (!isset($_REQUEST['destination'])) {
-    $form_state['redirect'] = 'admin/settings/whm/accounts/list';
+    $form_state['redirect'] = 'admin/whm/accounts/list';
   }
 }
 
@@ -575,7 +575,7 @@ function whm_ui_list_plans_form() {
         _whm_theme_plan_name($plan['name']),
       );
       if ($user_can_delete) {
-        $row[] = l(t('Delete'), "admin/settings/whm/plans/plan/{$plan['name']}/delete");
+        $row[] = l(t('Delete'), "admin/whm/plans/plan/{$plan['name']}/delete");
       }
       $rows[] = $row;
     }
@@ -715,7 +715,9 @@ function whm_ui_create_plan_form() {
     '#title' => t('Feature List'),
     '#description' => t('Name of the feature list to be used for the package.'),
     '#default_value' => '',
-    '#options' => array(whm_list_feature_lists()),
+    '#options' => array(
+      '' => t('TODO - Get features'),
+    ),
   );
   $form['plan']['settings']['language'] = array(
     '#type' => 'select',
@@ -757,7 +759,7 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
     drupal_set_message(t('Successfully created plan %plan', array(
       '%plan' => $form_values['values']['name']
     )));
-    return 'admin/settings/whm/plans/list';
+    return 'admin/whm/plans/list';
   }
   else {
     form_set_error('plan', 'An error occured while trying to create the new account. Please check the specified values and try again.');
@@ -775,7 +777,7 @@ function whm_ui_confirm_delete_plan(&$form_state, $plan_name) {
     t('Are you sure you want to delete the plan %name?', array(
       '%name' => _whm_theme_plan_name($plan_name)
     )),
-    'admin/settings/whm/plans/list',
+    'admin/whm/plans/list',
     t('TODO - Add a description.'),
     t('Delete'), 
     t('Cancel')
@@ -792,7 +794,7 @@ function whm_ui_confirm_delete_plan_submit($form, &$form_state) {
   ));
 
   if (!isset($_REQUEST['destination'])) {
-    $form_state['redirect'] = 'admin/settings/whm/plans/list';
+    $form_state['redirect'] = 'admin/whm/plans/list';
   }
 }
 

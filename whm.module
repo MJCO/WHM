@@ -19,18 +19,18 @@ function whm_permission() {
  */
 function whm_menu() {
   $items['admin/whm'] = array(
-    'title' => t('Web Hosting Manager (WHM)'),
-    'description' => t('Configure the Web Hosting Manager System'),
+    'title' => 'WHM',
+    'description' => 'Configure the Web Hosting Manager integration',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_admin_settings'),
     'access arguments' => array('administer whm settings'),
     'file' => 'includes/whm.admin.inc',
     'position' => 'right',
-    'weight' => 10,
+    'weight' => 6,
   );
   $items['admin/whm/settings'] = array(
-    'title' => t('Settings'),
-    'description' => t('Configure the Web Hosting Manager System'),
+    'title' => 'Settings',
+    'description' => 'Configure the Web Hosting Manager integration',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_admin_settings'),
     'access arguments' => array('administer whm settings'),

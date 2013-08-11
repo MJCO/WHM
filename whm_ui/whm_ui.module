@@ -47,8 +47,8 @@ function whm_ui_permission() {
  */
 function whm_ui_menu() {
   $items['admin/whm/accounts'] = array(
-    'title' => t('Accounts'),
-    'description' => t('List cPanel accounts managed by current reseller.'),
+    'title' => 'Accounts',
+    'description' => 'List cPanel accounts managed by current reseller.',
     'page callback' => 'whm_ui_list_accounts_form',
     'access arguments' => array('list whm accounts'),
     'file' => 'includes/whm.ui.admin.inc',
@@ -60,8 +60,8 @@ function whm_ui_menu() {
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['admin/whm/accounts/create'] = array(
-    'title' => t('Add Account'),
-    'description' => t('Create new cPanel account from current reseller.'),
+    'title' => 'Add Account',
+    'description' => 'Create new cPanel account from current reseller.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_create_account_form'),
     'access arguments' => array('create whm accounts'),
@@ -70,7 +70,7 @@ function whm_ui_menu() {
     'weight' => 1,
   );
   $items['admin/whm/accounts/account/%/edit'] = array(
-    'title' => t('Edit Account'),
+    'title' => 'Edit Account',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_edit_account_form', 5),
     'access arguments' => array('edit whm accounts'),
@@ -78,7 +78,7 @@ function whm_ui_menu() {
     'file' => 'includes/whm.ui.admin.inc',
   );
   $items['admin/whm/accounts/account/%/suspend'] = array(
-    'title' => t('Suspend'),
+    'title' => 'Suspend',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_confirm_suspend_account', 5),
     'access arguments' => array('suspend whm accounts'),
@@ -86,7 +86,7 @@ function whm_ui_menu() {
     'file' => 'includes/whm.ui.admin.inc',
   );
   $items['admin/whm/accounts/account/%/unsuspend'] = array(
-    'title' => t('Unsuspend'),
+    'title' => 'Unsuspend',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_confirm_unsuspend_account', 5),
     'access arguments' => array('suspend whm accounts'),
@@ -94,7 +94,7 @@ function whm_ui_menu() {
     'file' => 'includes/whm.ui.admin.inc',
   );
   $items['admin/whm/accounts/account/%/terminate'] = array(
-    'title' => t('Terminate'),
+    'title' => 'Terminate',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_confirm_terminate_account', 5),
     'access arguments' => array('terminate whm accounts'),
@@ -103,8 +103,8 @@ function whm_ui_menu() {
   );
 
   $items['admin/whm/plans'] = array(
-    'title' => t('Plans'),
-    'description' => t('List cPanel plans managed by current reseller.'),
+    'title' => 'Plans',
+    'description' => 'List cPanel plans managed by current reseller.',
     'page callback' => 'whm_ui_list_plans_form',
     'access arguments' => array('list whm plans'),
     'file' => 'includes/whm.ui.admin.inc',
@@ -112,12 +112,12 @@ function whm_ui_menu() {
     'weight' => 0,
   );
   $items['admin/whm/plans/list'] = array(
-    'title' => t('List'),
+    'title' => 'List',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['admin/whm/plans/create'] = array(
-    'title' => t('Add Plan'),
-    'description' => t('Create new cPanel plan form the current reseller.'),
+    'title' => 'Add Plan',
+    'description' => 'Create new cPanel plan form the current reseller.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_create_plan_form'),
     'access arguments' => array('create whm plans'),
@@ -126,7 +126,7 @@ function whm_ui_menu() {
     'weight' => 1,
   );
   $items['admin/whm/plans/plan/%'] = array(
-    'title' => t('View Plan'),
+    'title' => 'View Plan',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_view_plan_form', 5),
     'access arguments' => array('list whm plans'),
@@ -134,11 +134,11 @@ function whm_ui_menu() {
     'file' => 'includes/whm.ui.admin.inc',
   );
   $items['admin/whm/plans/plan/%/view'] = array(
-    'title' => t('View Plan'),
+    'title' => 'View Plan',
     'type' => MENU_DEFAULT_LOCAL_TASK,
   );
   $items['admin/whm/plans/plan/%/delete'] = array(
-    'title' => t('Delete'),
+    'title' => 'Delete',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_confirm_delete_plan', 5),
     'access arguments' => array('delete whm plans'),

@@ -39,6 +39,26 @@ function whm_ui_permission() {
       'description' => t('Can terminate WHM accounts.'),
       'restrict access' => TRUE,
     ),
+    'list whm plans' => array(
+      'title' => t('List WHM plans'),
+      'description' => t('Can list WHM plans/packages.'),
+      'restrict access' => TRUE,
+    ),
+    'create whm plans' => array(
+      'title' => t('Create WHM plans'),
+      'description' => t('Can create WHM plans/packages.'),
+      'restrict access' => TRUE,
+    ),
+    'edit whm plans' => array(
+      'title' => t('Edit WHM plans'),
+      'description' => t('Can edit WHM plans/packages.'),
+      'restrict access' => TRUE,
+    ),
+    'delete whm plans' => array(
+      'title' => t('Delete WHM plans'),
+      'description' => t('Can delete WHM plans/packages.'),
+      'restrict access' => TRUE,
+    ),
   );
 }
 
@@ -136,6 +156,14 @@ function whm_ui_menu() {
   $items['admin/whm/plans/plan/%/view'] = array(
     'title' => 'View Plan',
     'type' => MENU_DEFAULT_LOCAL_TASK,
+  );
+  $items['admin/whm/plans/plan/%/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('whm_ui_edit_plan_form', 4),
+    'access arguments' => array('edit whm plans'),
+    'type' => MENU_CALLBACK,
+    'file' => 'includes/whm.ui.admin.inc',
   );
   $items['admin/whm/plans/plan/%/delete'] = array(
     'title' => 'Delete',

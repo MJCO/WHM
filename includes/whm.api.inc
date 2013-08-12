@@ -651,11 +651,30 @@ function whm_list_plans() {
   return $data['package'];
 }
 
+function whm_account_info($plan) {
+  $result = _whm_command('listpkgs');
+  if ($result['name'] == $plan) {
+    return $result['package'];
+  }
+  return Constant::WHM_ERROR;
+}
+
 function whm_create_plan($name, $options = array()) {
   $options = array(
     'name' => $name,
   ) + $options;
   $result = _whm_command('addpkg', $options);
+  if ($result['result'][0]['status'] == 1) {
+    return Constant::WHM_SUCCESS;
+  }
+  return t($result['result'][0]['statusmsg']);
+}
+
+function whm_modify_plan($name, $options = array()) {
+  $options = array(
+    'name' => $name,
+  ) + $options;
+  $result = _whm_command('editpkg', $options);
   if ($result['result'][0]['status'] == 1) {
     return Constant::WHM_SUCCESS;
   }

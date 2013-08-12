@@ -235,7 +235,7 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
       }
     }
     if (!$plan_exists) {
-      form_set_error('plan', t('Please select an existing hosting plan for this account.'));
+      form_set_error('plan', t('Please select an existing hosting plan for this account. Alternatively <a href="!uri" title="Create a Plan">Create a Plan</a>')'!uri' => 'admin/whm/plans/create');
     }
   }
 }
@@ -570,10 +570,11 @@ function whm_ui_filter_form() {
 
 function whm_ui_list_plans_form() {
   $user_can_delete = user_access('delete whm plan');
+  $user_can_edit = user_access('edit whm plan');
   $header = array(
     t('Plan Name'),
   );
-  if ($user_can_delete) {
+  if ($user_can_delete || $user_can_edit) {
     $header[] = t('Operations');
   }
   $plans = whm_list_plans();
@@ -584,7 +585,14 @@ function whm_ui_list_plans_form() {
         _whm_theme_plan_name($plan['name']),
       );
       if ($user_can_delete) {
-        $row[] = l(t('Delete'), "admin/whm/plans/plan/{$plan['name']}/delete");
+        $operations[] = l(t('Delete'), "admin/whm/plans/plan/{$plan['name']}/delete");
+      }
+      
+      if ($user_can_edit) {
+        $operations .= ' ' . l(t('Edit'), "admin/whm/accounts/account/{$plan['name']}/edit");
+      }
+      if ($user_can_delete || $user_can_edit) {
+        $row[] = $operations;
       }
       $rows[] = $row;
     }
@@ -603,14 +611,14 @@ function whm_ui_list_plans_form() {
 }
 
 /**
- * Definition for the WHM create account form.
+ * Definition for the WHM account form.
  */
-function whm_ui_create_plan_form() {
+function _whm_ui_plan_form(&$form_state = NULL) {
   $form['plan']['name'] = array(
     '#type' => 'textfield',
     '#title' => t('Name'),
     '#description' => t('Enter the desired name for the new plan.'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['name'],
     '#required' => TRUE,
     '#size' => 16,
   );
@@ -622,63 +630,63 @@ function whm_ui_create_plan_form() {
     '#type' => 'textfield',
     '#title' => t('Quota'),
     '#description' => t('Disk space quota for the package (in Megabytes). Maximum: unlimited'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['quota'],
     '#size' => '12',
   );
   $form['plan']['resources']['bwlimit'] = array(
     '#type' => 'textfield',
     '#title' => t('Bandwidth Limit'),
     '#description' => t('The amount of bandwidth the account can use in a month. Maximum: unlimited'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['bwlimit'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxftp'] = array(
     '#type' => 'textfield',
     '#title' => t('Max FTP Accounts'),
     '#description' => t('The number of FTP accounts a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxftp'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxpop'] = array(
     '#type' => 'textfield',
     '#title' => t('Max POP Accounts'),
     '#description' => t('The number of email accounts a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxpop'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxlists'] = array(
     '#type' => 'textfield',
     '#title' => t('Max EMail Lists'),
     '#description' => t('The number of email lists a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxlists'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxsql'] = array(
     '#type' => 'textfield',
     '#title' => t('Max Databases'),
     '#description' => t('The number of SQL databases a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxsql'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxsub'] = array(
     '#type' => 'textfield',
     '#title' => t('Max Sub Domains'),
     '#description' => t('The number of subdomains a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxsub'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxpark'] = array(
     '#type' => 'textfield',
     '#title' => t('Max Parked Domains'),
     '#description' => t('The number of parked domains a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxpark'],
     '#size' => '12',
   );
   $form['plan']['resources']['maxaddon'] = array(
     '#type' => 'textfield',
     '#title' => t('Max Addon Domains'),
     '#description' => t('The number of addon domains a user assigned to the package can create. Maximum: 999'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['maxaddon'],
     '#size' => '12',
   );
   
@@ -690,25 +698,25 @@ function whm_ui_create_plan_form() {
     '#type' => 'checkbox',
     '#title' => t('Dedicated IP Address'),
     '#description' => t('Whether or not the account has a dedicated IP address.'),
-    '#default_value' => '0',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['ip'],
   );
   $form['plan']['settings']['hasshell'] = array(
     '#type' => 'checkbox',
     '#title' => t('Shell Access'),
     '#description' => t('Whether or not the account has shell access.'),
-    '#default_value' => '0',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['hasshell'],
   );
   $form['plan']['settings']['frontpage'] = array(
     '#type' => 'checkbox',
     '#title' => t('Frontpage Extensions'),
     '#description' => t('Whether or not the account can install FrontPage extensions.'),
-    '#default_value' => '0',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['frontpage'],
   );
   $form['plan']['settings']['cgi'] = array(
     '#type' => 'checkbox',
     '#title' => t('CGI Access'),
     '#description' => t('Whether or not the account has CGI access.'),
-    '#default_value' => '0',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['cgi'],
   );
   $form['plan']['settings']['cpmod'] = array(
     '#type' => 'select',
@@ -723,7 +731,7 @@ function whm_ui_create_plan_form() {
     '#type' => 'select',
     '#title' => t('Feature List'),
     '#description' => t('Name of the feature list to be used for the package.'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['featurelist'],
     '#options' => array(
       '' => t('TODO - Get features'),
     ),
@@ -732,20 +740,24 @@ function whm_ui_create_plan_form() {
     '#type' => 'select',
     '#title' => t('Locale'),
     '#description' => t('Name of the language to be used for this package by default.'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['language'],
     '#options' => array(
       '' => t('TODO - Get languages'),
     ),
   );
   $form['plan']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Create plan'),
+    '#value' => empty($form_state) ? t('Create plan') : t('Edit plan')),
   );
   return $form;
 }
 
+function whm_ui_create_plan_form() {
+  return _whm_ui_plan_form();
+}
+
 /**
- * Validation for the create plan form.
+ * Validation for the plan form.
  */
 function whm_ui_create_plan_form_validate($form_id, &$form_values) {
   $whmuser = variable_get('whm_username', '');
@@ -753,7 +765,7 @@ function whm_ui_create_plan_form_validate($form_id, &$form_values) {
 }
 
 /**
- * Submit processing for the create plan form.
+ * Submit processing for the plan form.
  */
 function whm_ui_create_plan_form_submit($form_id, $form_values) {
   $options = $form_values['values'];
@@ -773,6 +785,233 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
   else {
     form_set_error('plan', 'An error occured while trying to create the new account. Please check the specified values and try again.');
     form_set_error('plan', 'The WHM server responded with: ' . $rv);
+  }
+}
+
+
+function whm_ui_edit_plan_form($form, &$form_state, $plan) {
+
+  $res = whm_plan_info($plan);
+  $plan_data = $res[0];
+  $current_state = array('values' => array(
+    'name' => $plan_data['name'],
+    'quota' => $plan_data['quota'],
+    'bwlimit' => $plan_data['bwlimit'],
+    'maxftp' => $plan_data['maxftp'],
+    'maxpop' => $plan_data['maxpop'],
+    'maxlists' => $plan_data['maxlists'],
+    'maxsql' => $plan_data['maxsql'],
+    'maxsub' => $plan_data['maxsub'],
+    'maxpark' => $plan_data['maxpark'],
+    'maxaddon' => $plan_data['ip'],
+    'hasshell' => $plan_data['hasshell'],
+    'frontpage' => $plan_data['frontpage'],
+    'cgi' => $plan_data['cgi'],
+    'cpmod' => $plan_data['cpmod'],
+    'featurelist' => $plan_data['featurelist'],
+    'featurelist' => $plan_data['language'],
+  ));
+  $form_state['values'] = array_merge($current_state['values'], $form_state['input']);
+
+  $form = _whm_ui_plan_form($form_state);
+
+  $form['current_name'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['name'],
+    '#required' => TRUE,
+  );
+  $form['current_quota'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['quota'],
+    '#required' => TRUE,
+  );
+  $form['current_bwlimit'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['bwlimit'],
+    '#required' => TRUE,
+  );
+  $form['current_maxftp'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxftp'],
+    '#required' => TRUE,
+  );
+  $form['current_maxpop'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxpop'],
+    '#required' => TRUE,
+  );
+  $form['current_maxlists'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxlists'],
+    '#required' => TRUE,
+  );
+  $form['current_maxsql'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxsql'],
+    '#required' => TRUE,
+  );
+  $form['current_maxsub'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxsub'],
+    '#required' => TRUE,
+  );
+  $form['current_maxpark'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxpark'],
+    '#required' => TRUE,
+  );
+  $form['current_maxaddon'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['maxaddon'],
+    '#required' => TRUE,
+  );
+  $form['current_ip'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['ip'],
+    '#required' => TRUE,
+  );
+  $form['current_hasshell'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['hasshell'],
+    '#required' => TRUE,
+  );
+  $form['current_frontpage'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['frontpage'],
+    '#required' => TRUE,
+  );
+  $form['current_cgi'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['cgi'],
+    '#required' => TRUE,
+  );
+  $form['current_cpmod'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['cpmod'],
+    '#required' => TRUE,
+  );
+  $form['current_featurelist'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['featurelist'],
+    '#required' => TRUE,
+  );
+  $form['current_language'] = array(
+    '#type' => 'hidden',
+    '#default_value' => $current_state['values']['language'],
+    '#required' => TRUE,
+  );
+  return $form;
+}
+
+function whm_ui_edit_plan_form_validate($form_id, &$form_values) {
+  $whmuser = variable_get('whm_username', '');
+  $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name']; 
+}
+
+function whm_ui_edit_plan_form_submit($form_id, $form_values) {
+  $new_name = $form_state['values']['name'];
+  $current_name = $form_state['values']['current_name'];
+  $new_quota = $form_quota['values']['domain'];
+  $current_quota = $form_quota['values']['current_domain'];
+  $new_bwlimit = $form_state['values']['bwlimit'];
+  $current_bwlimit = $form_state['values']['current_bwlimit'];
+  $new_maxftp = $form_state['values']['maxftp'];
+  $current_maxftp = $form_state['values']['current_maxftp'];
+  $new_maxpop = $form_state['values']['maxpop'];
+  $current_maxpop = $form_state['values']['current_maxpop'];
+  $new_maxlists = $form_state['values']['maxlists'];
+  $current_maxlists = $form_state['values']['maxlists'];
+  $new_maxsql = $form_state['values']['maxsql'];
+  $current_maxsql = $form_state['values']['current_maxsql'];
+  $new_maxsub = $form_state['values']['maxsub'];
+  $current_maxsub = $form_state['values']['current_maxsub'];
+  $new_maxpark = $form_state['values']['maxpark'];
+  $current_maxpark = $form_state['values']['current_maxpark'];
+  $new_maxaddon = $form_state['values']['maxaddon'];
+  $current_maxaddon = $form_state['values']['current_maxaddon'];
+  $new_ip = $form_state['values']['ip'];
+  $current_ip = $form_state['values']['current_ip'];
+  $new_hasshell = $form_state['values']['hasshell'];
+  $current_hasshell = $form_state['values']['current_hasshell'];
+  $new_frontpage = $form_state['values']['frontpage'];
+  $current_frontpage = $form_state['values']['current_frontpage'];
+  $new_cgi = $form_state['values']['cgi'];
+  $current_cgi = $form_state['values']['current_cgi'];
+  $new_cpmod = $form_state['values']['cpmod'];
+  $current_cpmod = $form_state['values']['current_cpmod'];
+  $new_featurelist = $form_state['values']['featurelist'];
+  $current_featurelist = $form_state['values']['current_featurelist'];
+  $new_language = $form_state['values']['language'];
+  $current_language = $form_state['values']['current_language'];
+
+  $changed = array();
+  if ($new_name != $current_name) {
+    $changed['name'] = $new_name;
+  }
+  if ($new_quota != $current_quota) {
+    $changed['quota'] = $new_quota;
+  }
+  if ($new_bwlimit != $current_bwlimit) {
+    $changed['bwlimit'] = $new_bwlimit;
+  }
+  if ($new_maxftp != $current_maxftp) {
+    $changed['maxftp'] = $new_ftp;
+  }
+  if ($new_maxpop != $current_maxpop) {
+    $changed['maxpop'] = $new_maxpop;
+  }  
+  if ($new_maxlists != $current_maxlists) {
+    $changed['maxlists'] = $new_maxlists;
+  } 
+  if ($new_maxsql != $current_maxsql) {
+    $changed['maxsql'] = $new_maxsql;
+  }
+  if ($new_maxsub != $current_maxsub) {
+    $changed['maxsub'] = $new_maxsub;
+  }
+  if ($new_maxpark != $current_maxpark) {
+    $changed['maxpark'] = $new_maxpark;
+  }
+  if ($new_maxaddon != $current_maxaddon) {
+    $changed['maxaddon'] = $new_maxaddon;
+  }
+  if ($new_ip != $current_ip) {
+    $changed['ip'] = $new_ip;
+  }
+  if ($new_hasshell != $current_hasshell) {
+    $changed['hasshell'] = $new_hasshell;
+  }
+  if ($new_frontpage != $current_frontpage) {
+    $changed['frontpage'] = $new_frontpage;
+  }
+  if ($new_cgi != $current_cgi) {
+    $changed['cgi'] = $new_cgi;
+  }
+  if ($new_cpmod != $current_cpmod) {
+    $changed['cpmod'] = $new_cpmod;
+  }
+  if ($new_featurelist != $current_featurelist) {
+    $changed['featurelist'] = $new_featurelist;
+  }
+  if ($new_language != $current_language) {
+    $changed['language'] = $new_language;
+  }
+  
+  if (count($changed) == 0) {
+      drupal_set_message(t('Plan %plan was not updated. No updated values were provided.', array('%plan' => $current_name)));
+    $form_state['redirect'] = 'admin/whm/plans/list';
+    return;
+  }
+
+  $rv = whm_modify_plan($current_name, $changed);
+  if ($rv === Constant::WHM_SUCCESS) {
+    drupal_set_message(t('Successfully updated plan: <i>%plan</i>', array('%plan' => $new_plan)));
+    $form_state['redirect'] = 'admin/whm/accounts/list';
+    return;
+  }
+  else {
+    form_set_error('plan', 'An error occured while trying to update the account. Please check the specified values and try again.<br /> ' .
+      'The WHM server responded with: ' . $rv);
   }
 }
 

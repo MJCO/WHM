@@ -422,7 +422,7 @@ function whm_list_accounts($search_type = NULL, $search = NULL) {
  *   </li>
  */
 function whm_modify_account($user, $options = array()) {
-  $rv = whm_check_username($user);
+  $rv = whm_check_username($options['newuser']);
   if ($rv !== Constant::WHM_SUCCESS) {
     return $rv;
   }
@@ -702,6 +702,7 @@ function _whm_command($command, $args = array()) {
   $host = variable_get('whm_hostname', '');
   $whmuser = variable_get('whm_username', '');
   $whmauthkey = variable_get('whm_authkey', '');
+
   if (empty($host) || empty($whmuser) || empty($whmauthkey)) {
     return Constant::WHM_ERROR_VARS;
   }

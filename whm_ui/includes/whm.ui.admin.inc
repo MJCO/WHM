@@ -16,6 +16,7 @@ function whm_ui_list_accounts_form() {
     t('User/Account Name'),
     t('Domain Name'),
     t('Plan Type'),
+    t('Status'),
   );
   if ($user_can_suspend || $user_can_terminate || $user_can_edit) {
     $header[] = t('Operations');
@@ -24,10 +25,16 @@ function whm_ui_list_accounts_form() {
   $accts = whm_list_accounts();
   if (!empty($accts)) {
     foreach ($accts as $acct) {
+      if ($acct['suspended'] == 1) {
+        $status = t('Suspended');
+      } else {
+        $status = t('Active');
+      }
       $row = array(
         $acct['user'],
         $acct['domain'],
         _whm_theme_plan_name($acct['plan']),
+        $status,
       );
       if ($user_can_suspend) {
         if ($acct['suspended']) {
@@ -261,15 +268,17 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
   }
 }
 
-function whm_ui_edit_account_form(&$form_state, $account) {
+function whm_ui_edit_account_form($form, &$form_state, $account) {
 
   $res = whm_account_info($account);
   $account_data = $res[0];
   $current_state = array('values' => array(
     'user' => $account_data['user'],
     'domain' => $account_data['domain'],
+    'email' => $account_data['email'],
+    'plan' => $account_data['plan'],
   ));
-  $form_state['values'] = array_merge($current_state['values'], $form_state['post']);
+  $form_state['values'] = array_merge($current_state['values'], $form_state['input']);
 
   $form = _whm_ui_account_form($form_state);
   $form['account']['password'] = array(
@@ -304,12 +313,12 @@ function whm_ui_edit_account_form(&$form_state, $account) {
 /**
  * Validation for the edit account form.
  */
-function whm_ui_edit_account_form_validate($form_id, &$form_values) {
-  if (empty($form_values['values']['user'])) {
+function whm_ui_edit_account_form_validate($form, &$form_state) {
+  if (empty($form_state['values']['user'])) {
     form_set_error('user', t('Please enter a username for the new account.'));
   }
-  elseif ($form_values['values']['user'] != $form_values['values']['current_user']) {
-    $res = whm_check_username($form_values['values']['user']);
+  elseif ($form_state['values']['user'] != $form_state['values']['current_user']) {
+    $res = whm_check_username($form_state['values']['user']);
     if ($res == Constant::WHM_USERNAME_TAKEN) {
       form_set_error('user', t('This username is already taken. Please choose again.'));
     }
@@ -324,27 +333,27 @@ function whm_ui_edit_account_form_validate($form_id, &$form_values) {
     }
   }
   
-  if (!empty($form_values['values']['pwd1']) || !empty($form_values['values']['pwd2'])) {
-    if (empty($form_values['values']['pwd1'])) {
+  if (!empty($form_state['values']['pwd1']) || !empty($form_state['values']['pwd2'])) {
+    if (empty($form_state['values']['pwd1'])) {
       form_set_error('pwd1', t('Please enter a valid password for the account.'));
     }
-    if (empty($form_values['values']['pwd2'])) {
+    if (empty($form_state['values']['pwd2'])) {
       form_set_error('pwd2', t('Please re-enter the password for the account.'));
     }
-    if ($form_values['values']['pwd1'] !== $form_values['values']['pwd2']) {
+    if ($form_state['values']['pwd1'] !== $form_state['values']['pwd2']) {
       form_set_error('pwd2', t('The passwords do not match.'));
     }
-    $pwd = $form_values['values']['pwd1'];
+    $pwd = $form_state['values']['pwd1'];
     if (whm_check_password($pwd) !== Constant::WHM_SUCCESS) {
       form_set_error('pwd1', t('This password is invalid. Please enter a password of at least six characters in length.'));
     }
   }
   
-  if (empty($form_values['values']['domain'])) {
+  if (empty($form_state['values']['domain'])) {
     form_set_error('domain', t('Please enter a domain name for this account.'));
   }
-  elseif ($form_values['values']['domain'] != $form_values['values']['current_domain']) {
-    $res = whm_check_domain($form_values['values']['domain']);
+  elseif ($form_state['values']['domain'] != $form_state['values']['current_domain']) {
+    $res = whm_check_domain($form_state['values']['domain']);
     if ($res == Constant::WHM_DOMAIN_TAKEN) {
       form_set_error('domain', t('This domain name is already registered with this server.'));
     }
@@ -357,12 +366,12 @@ function whm_ui_edit_account_form_validate($form_id, &$form_values) {
 /**
  * Submit processing for the edit account form.
  */
-function whm_ui_edit_account_form_submit($form_id, &$form_values) {
-  $new_user = $form_values['values']['user'];
-  $current_user = $form_values['values']['current_user'];
-  $new_domain = $form_values['values']['domain'];
-  $current_domain = $form_values['values']['current_domain'];
-  $new_pass = $form_values['values']['pwd1'];
+function whm_ui_edit_account_form_submit($form, &$form_state) {
+  $new_user = $form_state['values']['user'];
+  $current_user = $form_state['values']['current_user'];
+  $new_domain = $form_state['values']['domain'];
+  $current_domain = $form_state['values']['current_domain'];
+  $new_pass = $form_state['values']['pwd1'];
 
   $changed = array();
   if ($new_user != $current_user) {
@@ -392,14 +401,14 @@ function whm_ui_edit_account_form_submit($form_id, &$form_values) {
     if (empty($new_pass)) {
       drupal_set_message(t('Account %user was not updated. No updated values were provided.', array('%user' => $current_user)));
     }
-    $form_values['redirect'] = 'admin/whm/accounts/list';
+    $form_state['redirect'] = 'admin/whm/accounts/list';
     return;
   }
 
-  $rv = whm_create_account($current_user, $changed);
+  $rv = whm_modify_account($current_user, $changed);
   if ($rv === Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully updated account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i>', array('%user' => $new_user, '%domain' => $new_domain)));
-    $form_values['redirect'] = 'admin/whm/accounts/list';
+    $form_state['redirect'] = 'admin/whm/accounts/list';
     return;
   }
   elseif ($rv === Constant::WHM_USERNAME_TAKEN) {
@@ -414,15 +423,15 @@ function whm_ui_edit_account_form_submit($form_id, &$form_values) {
 /**
  * Definition for the account suspension form.
  */
-function whm_ui_confirm_suspend_account(&$form_state, $account) {
+function whm_ui_confirm_suspend_account($form, &$form_state, $account) {
   $form['_whm_account'] = array('#type' => 'value', '#value' => $account);
   return confirm_form(
     $form,
-    t('Are you sure you want to suspend the WHM account for %name?', 
-      array('%name' => $account)
+    t('Are you sure you want to suspend the WHM account !name?', 
+      array('!name' => $account)
     ),
     'admin/whm/accounts/list',
-    t('The user account that this WHM account belongs to will no longer be able to access the site management tools.'),
+    t('This will suspend the account on the WHM server.'),
     t('Suspend'), 
     t('Cancel')
   );
@@ -443,7 +452,7 @@ function whm_ui_confirm_suspend_account_submit($form, &$form_state) {
 /**
  * Definition for the account unsuspension form.
  */
-function whm_ui_confirm_unsuspend_account(&$form_state, $account) {
+function whm_ui_confirm_unsuspend_account($form, &$form_state, $account) {
   $form['_whm_account'] = array('#type' => 'value', '#value' => $account);
   return confirm_form(
     $form,
@@ -451,7 +460,7 @@ function whm_ui_confirm_unsuspend_account(&$form_state, $account) {
       array('%name' => $account)
     ),
     'admin/whm/accounts/list',
-    '',
+    t('This will unsuspend the account on the WHM server.'),
     t('Unsuspend'), 
     t('Cancel')
   );
@@ -472,7 +481,7 @@ function whm_ui_confirm_unsuspend_account_submit($form, &$form_state) {
 /**
  * Definition for the account termination form.
  */
-function whm_ui_confirm_terminate_account(&$form_state, $account) {
+function whm_ui_confirm_terminate_account($form, &$form_state, $account) {
   $form['_whm_account'] = array('#type' => 'value', '#value' => $account);
   return confirm_form(
     $form,

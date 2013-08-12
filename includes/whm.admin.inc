@@ -7,6 +7,10 @@
 
 _whm_include('whm.api');
 
+function whm_admin_overview() {
+  
+}
+
 /**
  * Definition for the settings form.
  */
@@ -19,7 +23,7 @@ function whm_admin_settings() {
   $form['host']['hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('WHM Server Host'),
-    '#description' => t('The WHM server (ex. localhost or www.example.com or 127.0.0.1).'),
+    '#description' => t('The WHM server (IP address or hostname, hostname may not work on all systems depending on server DNS config.).'),
     '#default_value' => variable_get('whm_hostname', ''),
     '#required' => TRUE,
     '#size' => 32
@@ -27,18 +31,18 @@ function whm_admin_settings() {
   $form['host']['port'] = array(
     '#type' => 'radios',
     '#title' => t('WHM Connection Port'),
-    '#description' => t('Security setting for communication with the WHM server.'),
+    '#description' => t('Port/Security setting for communication with the WHM server.'),
     '#default_value' => variable_get('whm_port', 2086),
     '#required' => TRUE,
     '#options' => array(
-      '2086' => t('Insecure'),
-      '2087' => t('Secure')
+      '2086' => t('Insecure (Port: 2086)'),
+      '2087' => t('Secure (Port: 2087)')
     )
   );
   $form['host']['reseller'] = array(
     '#type' => 'checkbox',
     '#title' => t('This is a reseller account'),
-    '#description' => t('TODO'),
+    '#description' => t('Not implemented yet.'),
     '#default_value' => variable_get('whm_reseller', FALSE),
   );
   
@@ -90,6 +94,10 @@ function whm_admin_settings_validate($form, &$form_state) {
   if ($form_state['values']['port'] == 2086) {
     drupal_set_message(t('You have set WHM to use an insecure port, this is not recommended but is allowed.'), 'warning');
   }
+  
+  if ($form_state['values']['ignoresscert'] == 1) {
+    drupal_set_message(t('You have set WHM to ignore self signed certificates, this is not recommended but is allowed.'), 'warning');
+  }
 }
 
 /**
@@ -101,6 +109,7 @@ function whm_admin_settings_submit($form, &$form_state) {
   variable_set('whm_username', trim($form_state['values']['user']));
   variable_set('whm_authkey', trim($form_state['values']['auth']));
   variable_set('whm_port', trim($form_state['values']['port']));
+  variable_set('whm_ignoresscert', trim($form_state['value']['port']));
 
   // test connection by listing accounts
   $result = whm_version();

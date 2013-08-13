@@ -313,7 +313,7 @@ function whm_list_accounts($search_type = NULL, $search = NULL) {
  * When you modify an account using this API function,
  * the changes are in danger of being lost when the package is modified.
  * 
- * @param $user
+ * @param string $user
  *   User name of the account. Example: user
  * @param array $options
  *   The following variables are optional: 
@@ -327,7 +327,7 @@ function whm_list_accounts($search_type = NULL, $search = NULL) {
  *       <li>0 — no.</li>
  *     </ul>
  *   </li>
- *   <li>LANG (string) — Language to use in the account's cPanel interface.</li> 
+ *   <li>LANG (string) — Language to use.</li> 
  *   <li>
  *     LOCALE (string) — Locale to use in the account's cPanel interface. 
  *     Note: Only compatible with WHM version 11.25 and later.
@@ -402,7 +402,7 @@ function whm_modify_account($user, $options = array()) {
   if ($result['result'][0]['status'] == 1) {
     return WHMConstant::WHM_SUCCESS;
   }
-  return t($result['result'][0]['statusmsg']);
+  return $result['result'][0]['statusmsg'];
 }
 
 /**
@@ -410,7 +410,7 @@ function whm_modify_account($user, $options = array()) {
  * 
  * @param string $user
  *   User name of the account. Example: user
- * @param integer $quota
+ * @param int $quota
  *   The user's new disk space quota, in Megabytes. Example: 500
  */
 function whm_modify_quota($user, $quota) {
@@ -485,21 +485,21 @@ function whm_unsuspend_account($user) {
  */
 function whm_check_username($user) {
   $user = drupal_strtolower(trim($user));
-  
-  // check if username is too long
+
+  // Check if username is too long.
   if (drupal_strlen($user) > WHMConstant::WHM_MAX_USERNAME_LEN) {
     return WHMConstant::WHM_USERNAME_TOOLONG;
   }
 
-  // check username for non-alphanumeric characters
+  // Check username for non-alphanumeric characters.
   $validchr = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  for ($i=0; $i<drupal_strlen($user); $i++) {
-    if (strpos($validchr, $user[$i])===FALSE) {
+  for ($i = 0; $i < drupal_strlen($user); $i++) {
+    if (strpos($validchr, $user[$i]) === FALSE) {
       return WHMConstant::WHM_USERNAME_INVALID;
     }
   }
-  
-  // check if username is already taken
+
+  // Check if username is already taken.
   $accts = whm_list_accounts();
   foreach ($accts as $acct) {
     if ($acct['user'] == $user) {
@@ -514,37 +514,37 @@ function whm_check_username($user) {
  */
 function whm_check_domain($domain) {
   $domain = drupal_strtolower(trim($domain));
-  
-  // check domain for valid length (between 2 and 63)
-  if ( (drupal_strlen($domain)<2) || (drupal_strlen($domain)>63) ) {
+
+  // Check domain for valid length (between 2 and 63).
+  if ((drupal_strlen($domain) < 2) || (drupal_strlen($domain) > 63)) {
     return WHMConstant::WHM_DOMAIN_INVALID;
   }
-  
-  // check domain for valid characters
+
+  // Check domain for valid characters.
   $validchr = 'abcdefghijklmnopqrstuvwxyz0123456789-.';
-  for ($i=0; $i<drupal_strlen($domain); $i++) {
+  for ($i = 0; $i < drupal_strlen($domain); $i++) {
     if (strpos($validchr, $domain[$i]) === FALSE) {
       return WHMConstant::WHM_DOMAIN_INVALID;
     }
   }
 
-  // check that domain has at least one period
+  // Check that domain has at least one period.
   $dot = strpos($domain, '.');
   if ($dot === FALSE) {
     return WHMConstant::WHM_DOMAIN_INVALID;
   }
-  
-  // check that domain does not begin or end with a hyphen or period
-  if ( ($domain[0]=='.') || ($domain[0]=='-') || ($domain[$dot-1]=='.') || ($domain[$dot-1]=='-') ) {
+
+  // Check that domain does not begin or end with a hyphen or period.
+  if (($domain[0] == '.') || ($domain[0] == '-') || ($domain[$dot - 1] == '.') || ($domain[$dot - 1] == '-')) {
     return WHMConstant::WHM_DOMAIN_INVALID;
   }
   
-  // if domain begins with 'www.' strip subdomain
+  // Ff domain begins with 'www.' strip subdomain.
   if (drupal_substr($domain, 0, 4) === "www.") {
     $domain = drupal_substr($domain, 4);
   }
-  
-  // check if domain is already taken
+
+  // Check if domain is already taken.
   $accts = whm_list_accounts();
   foreach ($accts as $acct) {
     if ($acct['domain'] == $domain) {
@@ -560,22 +560,22 @@ function whm_check_domain($domain) {
 function whm_check_email($mail) {
   $mail = drupal_strtolower(trim($mail));
   $pos = strpos($mail, '@');
-  if ( ($pos===FALSE) || ($pos===0) ) {
+  if (($pos === FALSE) || ($pos === 0)) {
     return WHMConstant::WHM_EMAIL_INVALID;
   }
 
   $user = drupal_substr($mail, 0, $pos);
   $validchr = "abcdefghijklmnopqrstuvwxyz0123456789!#$%^&*-=_+?{}|~.";
-  for ($i=0; $i<drupal_strlen($user); $i++) {
-    if (strpos($validchr, $user[$i])===FALSE) {
+  for ($i = 0; $i < drupal_strlen($user); $i++) {
+    if (strpos($validchr, $user[$i]) === FALSE) {
       return WHMConstant::WHM_EMAIL_INVALID;
     }
   }
-  if ( ($user[0]=='.') || ($user[drupal_strlen($user)-1]=='.') ) {
+  if (($user[0] == '.') || ($user[drupal_strlen($user) - 1] == '.')) {
     return WHMConstant::WHM_EMAIL_INVALID;
   }
 
-  $domain = drupal_substr($mail, $pos+1);
+  $domain = drupal_substr($mail, $pos + 1);
   if (whm_check_domain($domain) !== WHMConstant::WHM_SUCCESS) {
     return WHMConstant::WHM_EMAIL_INVALID;
   }
@@ -596,28 +596,30 @@ function whm_check_password($pass) {
  * Check user-specified plan type with actual plan choices.
  */
 function whm_check_plan($plan) {
-  $plan=trim($plan);
+  $plan = trim($plan);
   $plans = whm_list_plans();
   foreach ($plans as $plan_data) {
     if ($plan_data['name'] == $plan) {
       return WHMConstant::WHM_SUCCESS;
-      break;
     }
   }
   return WHMConstant::WHM_ERROR;
 }
 
 /**
- * This function lists all hosting packages available for use by the WHM user who is currently logged in. If that user 
- * is a reseller, he or she may not see some packages that exist, if those packages are not currently available to be 
- * used for account creation.
- * 
+ * This function lists all hosting packages available for use.
  */
 function whm_list_plans() {
   $data = _whm_command('listpkgs');
   return $data['package'];
 }
 
+/**
+ * This function lists plans matching the given name.
+ * 
+ * @param string $plan
+ *  Name of the plan.
+ */
 function whm_plan_info($plan) {
   $data = _whm_command('listpkgs');
   $results = $data['package'];

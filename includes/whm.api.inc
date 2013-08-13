@@ -86,7 +86,7 @@ function whm_available_languages() {
  */
 
 /**
- * This function creates a hosting account and sets up its associated information.
+ * This function creates a hosting account and sets up associated information.
  * 
  * @param string $user
  *   Username for the account. Example: user 
@@ -115,7 +115,7 @@ function whm_available_languages() {
  *       <li>0 is unlimited.</li>
  *     </ul>
  *   </li> 
- *   <li>password (string) — Password for accessing cPanel. Example: p@ss!w0rd$123</li>
+ *   <li>password (string) — Password for accessing cPanel.</li>
  *   <li>ip (string) — Whether or not the domain has a dedicated IP address.
  *     <ul>
  *       <li>y — yes.</li>
@@ -198,9 +198,10 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>bwlimit (string) — Bandiwdth limit in Megabytes. Must between 0 and 999999.
+ *   <li>bwlimit (string) — Bandiwdth limit in Megabytes.
  *     <ul>
  *       <li>0 is unlimited.</li>
+ *       <li>Must between 0 and 999999.</li>
  *     </ul> 
  *   </li>
  *   <li>customip (string) — Specific IP address for the site.</li>
@@ -242,12 +243,12 @@ function whm_create_account($user, $domain, $options = array()) {
   $result = _whm_command('createacct', $options);
   if ($result['result'][0]['status'] == 1) {
     return WHMConstant::WHM_SUCCESS;
-  }
-  return t($result['result'][0]['statusmsg']);
+  } 
+  return $result['result'][0]['statusmsg'];
 }
 
 /**
- * This function changes the password of a domain owner (cPanel) or reseller (WHM) account.
+ * This function changes the password of an account.
  * 
  * @param string $user
  *   Name of the user whose password should be changed.
@@ -261,7 +262,7 @@ function whm_change_password($user, $pass) {
     if ($result['passwd'][0]['status'] == 1) {
       return WHMConstant::WHM_SUCCESS;
     }
-  } 
+  }
   else {
     return $rv;
   }
@@ -269,7 +270,6 @@ function whm_change_password($user, $pass) {
 }
 
 /**
- * 
  * This function modifies the bandwidth usage (transfer) limit for a specific account.
  *  
  * @param string $user
@@ -286,8 +286,7 @@ function whm_limit_bandwidth($user, $limit) {
 }
 
 /**
- * This function lists all accounts on the server, and also allows you to  search for a specific account or set of 
- * accounts.
+ * This function lists all accounts on the server and also allows searching.
  * 
  * @param string $search_type
  *   Type of account search. Allowed values: domain, owner, user, ip, package

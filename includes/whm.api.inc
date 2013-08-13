@@ -617,8 +617,8 @@ function whm_list_plans() {
 /**
  * This function lists plans matching the given name.
  * 
- *  @param string $plan
- *  Name of the plan.
+ * @param string $plan
+ *   Name of the plan.
  */
 function whm_plan_info($plan) {
   $data = _whm_command('listpkgs');
@@ -634,11 +634,11 @@ function whm_plan_info($plan) {
 /**
  * This function creates a new plan.
  *
- *  @param string $name
- *  Name of the plan.
+ * @param string $name
+ *   Name of the plan.
  *
- *  @param array $options
- *  Options/variables for plan settings.
+ * @param array $options
+ *   Options/variables for plan settings.
  */
 function whm_create_plan($name, $options = array()) {
   $options = array(
@@ -654,11 +654,11 @@ function whm_create_plan($name, $options = array()) {
 /**
  * This function modifies an existing plan.
  *
- *  @param string $name
- *  Name of the plan.
+ * @param string $name
+ *   Name of the plan.
  *
- *  @param array $options
- *  Options/variables for plan settings.
+ * @param array $options
+ *   Options/variables for plan settings.
  */
 function whm_modify_plan($name, $options = array()) {
   $options = array(
@@ -668,14 +668,14 @@ function whm_modify_plan($name, $options = array()) {
   if ($result['result'][0]['status'] == 1) {
     return WHMConstant::WHM_SUCCESS;
   }
-  return t($result['result'][0]['statusmsg']);
+  return $result['result'][0]['statusmsg'];
 }
 
 /**
  * This function creates a new plan.
  *
- *  @param string $plan_name
- *  Name of the plan.
+ * @param string $plan_name
+ *   Name of the plan.
  */
 function whm_delete_plan($plan_name) {
   if (empty($plan_name)) {

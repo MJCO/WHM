@@ -66,10 +66,10 @@ function whm_ui_list_accounts_form() {
     'caption' => "",
     'colgroups' => array(),
     // The message to be displayed if table is empty.
-    'empty' => t('No accounts found. Check WHM settings.')
+    'empty' => t('No accounts found. Check WHM settings.'),
     )
   );
-  return $output;   
+  return $output;
 }
 
 /**
@@ -97,7 +97,7 @@ function _whm_ui_account_form(&$form_state = NULL) {
     '#required' => TRUE,
     '#size' => 16,
   );
-  
+
   $form['account']['email'] = array(
     '#type' => 'textfield',
     '#title' => t('Contact e-mail'),
@@ -115,7 +115,7 @@ function _whm_ui_account_form(&$form_state = NULL) {
     '#required' => TRUE,
     '#size' => 16,
   );
-  
+
   $form['account']['pwd2'] = array(
     '#type' => 'password',
     '#title' => t('Confirm password'),
@@ -124,7 +124,7 @@ function _whm_ui_account_form(&$form_state = NULL) {
     '#required' => TRUE,
     '#size' => 16,
   );
-  
+
   $form['account']['domain'] = array(
     '#type' => 'textfield',
     '#title' => t('Domain name'),
@@ -133,12 +133,12 @@ function _whm_ui_account_form(&$form_state = NULL) {
     '#required' => TRUE,
     '#size' => 24,
   );
-  
+
   $plan_array = array();
   foreach (whm_list_plans() as $plan) {
     $plan_array[$plan['name']] = _whm_theme_plan_name($plan['name']);
   }
-  
+
   $form['account']['plan'] = array(
     '#type' => 'radios',
     '#title' => t('Plan type'),
@@ -147,17 +147,7 @@ function _whm_ui_account_form(&$form_state = NULL) {
     '#default_value' => empty($form_state) ? '' : $form_state['values']['plan'],
     '#required' => TRUE,
   );
-  
-//  $form['account']['features'] = array(
-//    '#type' => 'fieldset',
-//    '#title' => t('Account Feature Overrides'),
-//    '#collapsible' => TRUE,
-//    '#collapsed' => TRUE,
-//  );
-//  $plan_form = whm_ui_create_plan_form();
-//  $form['account']['features'] += $plan_form['plan'];
-//  unset($form['account']['features']['name']);
-  
+
   $form['account']['submit'] = array(
     '#type' => 'submit',
     '#value' => empty($form_state) ? t('Create account') : t('Update account'),

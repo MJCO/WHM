@@ -648,7 +648,7 @@ function whm_create_plan($name, $options = array()) {
   if ($result['result'][0]['status'] == 1) {
     return WHMConstant::WHM_SUCCESS;
   }
-  return t($result['result'][0]['statusmsg']);
+  return $result['result'][0]['statusmsg'];
 }
 
 /**

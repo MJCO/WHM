@@ -80,7 +80,7 @@ function whm_ui_view_account_form($account) {
 }
 
 /**
- * Definition for the WHM create account form.
+ * Definition for the WHM account form.
  */
 function _whm_ui_account_form(&$form_state = NULL) {
 
@@ -156,7 +156,9 @@ function _whm_ui_account_form(&$form_state = NULL) {
   return $form;
 }
 
-
+/**
+ * Definition for the WHM Create Account form.
+ */
 function whm_ui_create_account_form() {
   return _whm_ui_account_form();
 }
@@ -181,7 +183,7 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
       form_set_error('user', t('This username is too long. Please choose a username with %len or fewer characters.', array('%len' => WHMConstant::WHM_MAX_USERNAME_LEN)));
     }
   }
-  
+
   if (empty($form_values['values']['email'])) {
     form_set_error('email', t('Please enter a contact e-mail address for the new account.'));
   }
@@ -203,7 +205,7 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
   if (whm_check_password($pwd) !== WHMConstant::WHM_SUCCESS) {
     form_set_error('pwd1', t('This password is invalid. Please enter a password of at least six characters in length.'));
   }
-  
+
   if (empty($form_values['values']['domain'])) {
     form_set_error('domain', t('Please enter a domain name for this account.'));
   }
@@ -241,21 +243,25 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
  * Submit processing for the create account form.
  */
 function whm_ui_create_account_form_submit($form_id, &$form_values) {
-  // variable checks take place in whm_ui_createacct_form_validate
-  // and in whm_ui_create_account
   $user = $form_values['values']['user'];
   $email = $form_values['values']['email'];
   $pwd = $form_values['values']['pwd1'];
   $domain = $form_values['values']['domain'];
   $plan = $form_values['values']['plan'];
-  
+
   $rv = whm_create_account($user, $domain, array(
     'contactemail' => $email, 
     'pass' => $pwd, 
     'plan' => $plan
   ));
   if ($rv === WHMConstant::WHM_SUCCESS) {
-    drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />', array('%user' => $user, '%domain' => $domain, '%plan' => $plan)));
+    drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />', 
+    array(
+      '%user' => $user,
+      '%domain' => $domain,
+      '%plan' => $plan,
+    ),
+    ));
     $form_values['redirect'] = 'admin/whm/accounts/list';
     return;
   }

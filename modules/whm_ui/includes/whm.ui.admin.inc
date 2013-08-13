@@ -27,7 +27,8 @@ function whm_ui_list_accounts_form() {
     foreach ($accts as $acct) {
       if ($acct['suspended'] == 1) {
         $status = t('Suspended');
-      } else {
+      }
+      else {
         $status = t('Active');
       }
       $row = array(
@@ -39,7 +40,8 @@ function whm_ui_list_accounts_form() {
       if ($user_can_suspend) {
         if ($acct['suspended']) {
           $operations = l(t('Unsuspend'), "admin/whm/accounts/account/{$acct['user']}/unsuspend");
-        } else {
+        }
+        else {
           $operations = l(t('Suspend'), "admin/whm/accounts/account/{$acct['user']}/suspend");
         }
       }
@@ -59,15 +61,20 @@ function whm_ui_list_accounts_form() {
     'header' => $header,
     'rows' => $rows,
     'attributes' => array(),
-    'sticky' => true, // Table header will be sticky
+    // Table header will be sticky.
+    'sticky' => TRUE,
     'caption' => "",
     'colgroups' => array(),
-    'empty' => t('No accounts found. Check WHM settings.') // The message to be displayed if table is empty
+    // The message to be displayed if table is empty.
+    'empty' => t('No accounts found. Check WHM settings.')
     )
   );
   return $output;   
 }
 
+/**
+ * Definition for the WHM view account form.
+ */
 function whm_ui_view_account_form($account) {
   print $account;
 }

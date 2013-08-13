@@ -538,8 +538,8 @@ function whm_check_domain($domain) {
   if (($domain[0] == '.') || ($domain[0] == '-') || ($domain[$dot - 1] == '.') || ($domain[$dot - 1] == '-')) {
     return WHMConstant::WHM_DOMAIN_INVALID;
   }
-  
-  // Ff domain begins with 'www.' strip subdomain.
+
+  // If domain begins with 'www.' strip subdomain.
   if (drupal_substr($domain, 0, 4) === "www.") {
     $domain = drupal_substr($domain, 4);
   }
@@ -617,7 +617,7 @@ function whm_list_plans() {
 /**
  * This function lists plans matching the given name.
  * 
- * @param string $plan
+ *  @param string $plan
  *  Name of the plan.
  */
 function whm_plan_info($plan) {
@@ -631,6 +631,15 @@ function whm_plan_info($plan) {
   return WHMConstant::WHM_ERROR;
 }
 
+/**
+ * This function creates a new plan.
+ *
+ *  @param string $name
+ *  Name of the plan.
+ *
+ *  @param array $options
+ *  Options/variables for plan settings.
+ */
 function whm_create_plan($name, $options = array()) {
   $options = array(
     'name' => $name,
@@ -642,6 +651,15 @@ function whm_create_plan($name, $options = array()) {
   return t($result['result'][0]['statusmsg']);
 }
 
+/**
+ * This function modifies an existing plan.
+ *
+ *  @param string $name
+ *  Name of the plan.
+ *
+ *  @param array $options
+ *  Options/variables for plan settings.
+ */
 function whm_modify_plan($name, $options = array()) {
   $options = array(
     'name' => $name,
@@ -653,6 +671,12 @@ function whm_modify_plan($name, $options = array()) {
   return t($result['result'][0]['statusmsg']);
 }
 
+/**
+ * This function creates a new plan.
+ *
+ *  @param string $plan_name
+ *  Name of the plan.
+ */
 function whm_delete_plan($plan_name) {
   if (empty($plan_name)) {
     return WHMConstant::WHM_ERROR_VARS;
@@ -680,12 +704,11 @@ function whm_list_feature_lists() {
 /**
  * Execute WHM script as current reseller account.
  * 
- * 
  * Returns error code or response data.
  * 
- * @param $command
+ * @param string $command
  *   The name of the WHM command resource to resolve.
- * @param $args
+ * @param array $args
  *   Any optional parameters that maybe passed as args to the target WHM 
  *   command.
  */
@@ -716,6 +739,9 @@ function _whm_command($command, $args = array()) {
   return $data;
 }
 
+/**
+ * Helper function to build command url.
+ */
 function _whm_build_command_url($command, $args = array()) {
   $host = variable_get('whm_hostname', '');
   $port = variable_get('whm_port', WHMConstant::WHM_STANDARD_PORT);
@@ -731,6 +757,9 @@ function _whm_build_command_url($command, $args = array()) {
   return $url;
 }
 
+/**
+ * Helper function to build command headers.
+ */
 function _whm_build_command_headers() {
   $host = variable_get('whm_hostname', '');
   $whmuser = variable_get('whm_username', '');
@@ -747,7 +776,10 @@ function _whm_build_command_headers() {
   return $headers;
 }
 
+/**
+ * Helper function to return plan name as themeable output.
+ */
 function _whm_theme_plan_name($name) {
   $whmuser = variable_get('whm_username', '');
-  return str_replace($whmuser . '_', '', $name);  
+  return str_replace($whmuser . '_', '', $name);
 }

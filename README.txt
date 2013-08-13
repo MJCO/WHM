@@ -1,13 +1,10 @@
-/**
- * WHM module for Drupal: WebHost Manager (WHM) Integration
- *
- * Original Author: Joe Turgeon [http://arithmetric.com]
- * Current Author: Mikey O'Toole (http://mjco.ltd.uk)
- * Original Sponsorship: Sundays Energy [http://sundaysenergy.com]
- * Current Sponsorship: MJCO [http://mjco.ltd.uk]
- * Licensed under GPL v3
- * Version 2013/08/12
- */
+## WHM module for Drupal: WebHost Manager (WHM) Integration
+
+* Original Author: Joe Turgeon [http://arithmetric.com]
+* Current Author: Mikey O'Toole (http://mjco.ltd.uk)
+* Original Sponsorship: Sundays Energy [http://sundaysenergy.com]
+* Current Sponsorship: MJCO [http://mjco.ltd.uk]
+* Licensed under GPL v3
 
 WebHost Manager (WHM) is a commercial server administration system
 that manages hosted cPanel accounts. This module provides a user and
@@ -19,10 +16,10 @@ This project is not authorized or supported by cPanel. For information
 on the cPanel or WHM products, see:
 http://www.cpanel.net
 
-INSTALLATION
+## Installation
 
 Download the latest release of this module from:
-http://drupal.org/project/whm or http://github.com/MikeyMJCO/WHM
+http://drupal.org/project/whm or http://mjco.github.io/WHM
 
 Uncompress the archive in your modules directory (sites/all/modules or
 sites/[name]/modules).
@@ -38,7 +35,7 @@ by WHM, and can be found under 'Setup Remote Access Key' in the WHM
 interface. Note: In WHM, the reseller account must be granted specific
 permission to list, create, and suspend accounts.
 
-FEATURES
+## Features
 
 This module enables three WHM functions through a user and programming
 interface: listing, creating, and (un)suspending accounts managed by
@@ -52,8 +49,8 @@ specified username, contact e-mail address, password, domain name, and
 hosting plan.
 
 User access to these functions is limited by the permissions set in
-User management >> Access control under the WHM module. Access can be
-granted by function (to list accounts, to create a new account, or 
+Admin > People > Permissions under the WHM heading. Access can be
+granted by function (e.g: to list accounts, to create a new account, or 
 to (un)suspend accounts).
 
 Additionally, this module provides a direct programming interface to

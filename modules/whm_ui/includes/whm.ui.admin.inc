@@ -292,7 +292,7 @@ function whm_ui_edit_account_form($form, &$form_state, $account) {
   $form['account']['password'] = array(
     '#type' => 'fieldset',
     '#title' => t('Change Password'),
-    '#description' => t('Enter values here <b>ONLY</b> if you want to change this account\'s password.'),
+    '#description' => t("Enter values here <b>ONLY</b> if you want to change this account's password."),
     '#collapsible' => TRUE,
     '#collapsed' => empty($form_state['values']['pwd1']) && empty($form_state['values']['pwd2']),
   );
@@ -340,7 +340,7 @@ function whm_ui_edit_account_form_validate($form, &$form_state) {
       form_set_error('user', t('There was a problem with this username.'));
     }
   }
-  
+
   if (!empty($form_state['values']['pwd1']) || !empty($form_state['values']['pwd2'])) {
     if (empty($form_state['values']['pwd1'])) {
       form_set_error('pwd1', t('Please enter a valid password for the account.'));
@@ -356,7 +356,7 @@ function whm_ui_edit_account_form_validate($form, &$form_state) {
       form_set_error('pwd1', t('This password is invalid. Please enter a password of at least six characters in length.'));
     }
   }
-  
+
   if (empty($form_state['values']['domain'])) {
     form_set_error('domain', t('Please enter a domain name for this account.'));
   }
@@ -404,7 +404,7 @@ function whm_ui_edit_account_form_submit($form, &$form_state) {
       drupal_set_message(t('Successfully updated password.'));
     }
   }
-  
+
   if (count($changed) == 0) {
     if (empty($new_pass)) {
       drupal_set_message(t('Account %user was not updated. No updated values were provided.', array('%user' => $current_user)));
@@ -464,7 +464,7 @@ function whm_ui_confirm_unsuspend_account($form, &$form_state, $account) {
   $form['_whm_account'] = array('#type' => 'value', '#value' => $account);
   return confirm_form(
     $form,
-    t('Are you sure you want to unsuspend the WHM account %name?', 
+    t('Are you sure you want to unsuspend the WHM account %name?',
       array('%name' => $account)
     ),
     'admin/whm/accounts/list',
@@ -473,13 +473,17 @@ function whm_ui_confirm_unsuspend_account($form, &$form_state, $account) {
     t('Cancel')
   );
 }
-  
+
 /**
  * Submit function for the confirm form for user deletion.
  */
 function whm_ui_confirm_unsuspend_account_submit($form, &$form_state) {
   whm_unsuspend_account($form_state['values']['_whm_account']);
-  drupal_set_message(t('WHM account %name has been unsuspended.', array('%name' => $form_state['values']['_whm_account'])));
+  drupal_set_message(t('WHM account %name has been unsuspended.',
+    array(
+      '%name' => $form_state['values']['_whm_account']
+    )
+  ));
 
   if (!isset($_REQUEST['destination'])) {
     $form_state['redirect'] = 'admin/whm/accounts/list';
@@ -493,16 +497,16 @@ function whm_ui_confirm_terminate_account($form, &$form_state, $account) {
   $form['_whm_account'] = array('#type' => 'value', '#value' => $account);
   return confirm_form(
     $form,
-    t('Are you sure you want to terminate the WHM account %name?', 
+    t('Are you sure you want to terminate the WHM account %name?',
       array('%name' => $account)
     ),
     'admin/whm/accounts/list',
     t('This action is not reversible.'),
-    t('Terminate'), 
+    t('Terminate'),
     t('Cancel')
   );
 }
-  
+
 /**
  * Submit function for the confirm form for account termination.
  */

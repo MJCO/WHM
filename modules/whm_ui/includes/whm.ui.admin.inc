@@ -623,7 +623,7 @@ function whm_ui_list_plans_form() {
     'empty' => t('No plans found. Check WHM settings.'),
     )
   );
-  return $output; 
+  return $output;
 }
 
 /**
@@ -705,7 +705,6 @@ function _whm_ui_plan_form(&$form_state = NULL) {
     '#default_value' => empty($form_state) ? '' : $form_state['values']['maxaddon'],
     '#size' => '12',
   );
-  
   $form['plan']['settings'] = array(
     '#type' => 'fieldset',
     '#title' => t('Settings'),
@@ -768,6 +767,9 @@ function _whm_ui_plan_form(&$form_state = NULL) {
   return $form;
 }
 
+/**
+ * Definition for the WHM Create Plan form.
+ */
 function whm_ui_create_plan_form() {
   return _whm_ui_plan_form();
 }
@@ -777,7 +779,7 @@ function whm_ui_create_plan_form() {
  */
 function whm_ui_create_plan_form_validate($form_id, &$form_values) {
   $whmuser = variable_get('whm_username', '');
-  $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name']; 
+  $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name'];
 }
 
 /**
@@ -793,9 +795,11 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
   _whm_ui_unset_form_api($options);
   $rv = whm_create_plan($form_values['values']['name'], $options);
   if ($rv === WHMConstant::WHM_SUCCESS) {
-    drupal_set_message(t('Successfully created plan %plan', array(
-      '%plan' => $form_values['values']['name']
-    )));
+    drupal_set_message(t('Successfully created plan %plan',
+      array(
+        '%plan' => $form_values['values']['name'],
+        )
+    ));
     return 'admin/whm/plans/list';
   }
   else {
@@ -829,25 +833,27 @@ function whm_ui_edit_plan_form($form, &$form_state, $plan) {
   } else {
     $cgi = 0;
   }
-  $current_state = array('values' => array(
-    'name' => $plan_data['name'],
-    'quota' => $plan_data['QUOTA'],
-    'bwlimit' => $plan_data['BWLIMIT'],
-    'maxftp' => $plan_data['MAXFTP'],
-    'maxpop' => $plan_data['MAXPOP'],
-    'maxlists' => $plan_data['MAXLST'],
-    'maxsql' => $plan_data['MAXSQL'],
-    'maxsub' => $plan_data['MAXSUB'],
-    'maxpark' => $plan_data['MAXPARK'],
-    'maxaddon' => $plan_data['MAXADDON'],
-    'ip' => $ip,
-    'hasshell' => $hasshell,
-    'frontpage' => $frontpage,
-    'cgi' => $cgi,
-    'cpmod' => $plan_data['CPMOD'],
-    'featurelist' => $plan_data['FEATURELIST'],
-    'language' => $plan_data['LANG'],
-  ));
+  $current_state = array(
+    'values' => array(
+      'name' => $plan_data['name'],
+      'quota' => $plan_data['QUOTA'],
+      'bwlimit' => $plan_data['BWLIMIT'],
+      'maxftp' => $plan_data['MAXFTP'],
+      'maxpop' => $plan_data['MAXPOP'],
+      'maxlists' => $plan_data['MAXLST'],
+      'maxsql' => $plan_data['MAXSQL'],
+      'maxsub' => $plan_data['MAXSUB'],
+      'maxpark' => $plan_data['MAXPARK'],
+      'maxaddon' => $plan_data['MAXADDON'],
+      'ip' => $ip,
+      'hasshell' => $hasshell,
+      'frontpage' => $frontpage,
+      'cgi' => $cgi,
+      'cpmod' => $plan_data['CPMOD'],
+      'featurelist' => $plan_data['FEATURELIST'],
+      'language' => $plan_data['LANG'],
+    )
+  );
   $form_state['values'] = array_merge($current_state['values'], $form_state['input']);
 
   $form = _whm_ui_plan_form($form_state);

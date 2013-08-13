@@ -2,20 +2,20 @@
 
 /**
  * @file
- * Provides menus, permissions, and utility methods for the WHM module and sub-modules.
+ * Provides menus, permissions and utilities to WHM Module.
  */
 
 _whm_include('whm.api');
 
 /**
- * Implementation of hook_permission().
+ * Implements hook_permission().
  */
 function whm_permission() {
   return array('administer whm settings');
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function whm_menu() {
   $items['admin/whm'] = array(
@@ -37,7 +37,7 @@ function whm_menu() {
     'file' => 'includes/whm.admin.inc',
   );
   $items['admin/whm/settings'] = array(
-    'title' => t('Settings'),
+    'title' => 'Settings',
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => -1,
   );
@@ -45,7 +45,7 @@ function whm_menu() {
 }
 
 /**
- * Implementation of hook_simpletest().
+ * Implements hook_simpletest().
  */
 function whm_simpletest() {
   $dir = drupal_get_path('module', 'whm') . '/tests';
@@ -76,10 +76,10 @@ function _whm_dump($data, $exit = TRUE) {
   print '<pre>';
   if (is_array($data)) {
     print_r($data);
-  } 
+  }
   elseif (is_object($data)) {
     var_dump($data);
-  } 
+  }
   else {
     print $data;
   }

@@ -83,8 +83,8 @@ function whm_admin_settings_validate($form, &$form_state) {
   if (empty($form_state['values']['user'])) {
     form_set_error('user', t('Please enter the WHM username to use.'));
   }
-  elseif (drupal_strlen($form_state['values']['user']) > Constant::WHM_MAX_USERNAME_LEN) {
-    form_set_error('user', t('Username length must be less than or equal to %len', array('%len' => Constant::WHM_MAX_USERNAME_LEN)));
+  elseif (drupal_strlen($form_state['values']['user']) > WHM_Constant::WHM_MAX_USERNAME_LEN) {
+    form_set_error('user', t('Username length must be less than or equal to %len', array('%len' => WHM_Constant::WHM_MAX_USERNAME_LEN)));
   }
   
   if (empty($form_state['values']['auth'])) {
@@ -113,14 +113,14 @@ function whm_admin_settings_submit($form, &$form_state) {
 
   // test connection by listing accounts
   $result = whm_version();
-  if ($result === Constant::WHM_ERROR_CONNECT) {
+  if ($result === WHM_Constant::WHM_ERROR_CONNECT) {
     form_set_error('hostname', t('Unable to connect to WHM. Please check the hostname.'));
   }
-  elseif ($result === Constant::WHM_ERROR_AUTH) {
+  elseif ($result === WHM_Constant::WHM_ERROR_AUTH) {
     form_set_error('user', t('Unable to authenticate with WHM. Please check the username.'));
     form_set_error('auth', t('Unable to authenticate with WHM. Please check the remote access key that should be copied from WHM.'));
   }
-  elseif ($result == Constant::WHM_ERROR_CURL) {
+  elseif ($result == WHM_Constant::WHM_ERROR_CURL) {
     drupal_set_message(t('cURL does not appear to be setup on this server. Please ensure that your PHP installation has cURL setup properly.'), 'error');
   }
   elseif (!empty($result)) {

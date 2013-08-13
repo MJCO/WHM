@@ -174,14 +174,14 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
   else {
     $user = $form_values['values']['user'];
     $res = whm_check_username($user);
-    if ($res == Constant::WHM_USERNAME_TAKEN) {
+    if ($res == WHM_Constant::WHM_USERNAME_TAKEN) {
       form_set_error('user', t('This username is already taken. Please choose again.'));
     }
-    elseif ($res == Constant::WHM_USERNAME_INVALID) {
+    elseif ($res == WHM_Constant::WHM_USERNAME_INVALID) {
       form_set_error('user', t('This username is invalid. Please choose a username that contains only letters and numbers.'));
     }
-    elseif ($res == Constant::WHM_USERNAME_TOOLONG) {
-      form_set_error('user', t('This username is too long. Please choose a username with %len or fewer characters.', array('%len' => Constant::WHM_MAX_USERNAME_LEN)));
+    elseif ($res == WHM_Constant::WHM_USERNAME_TOOLONG) {
+      form_set_error('user', t('This username is too long. Please choose a username with %len or fewer characters.', array('%len' => WHM_Constant::WHM_MAX_USERNAME_LEN)));
     }
   }
   
@@ -189,7 +189,7 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
     form_set_error('email', t('Please enter a contact e-mail address for the new account.'));
   }
   $email = $form_values['values']['email'];
-  if (whm_check_email($email) !== Constant::WHM_SUCCESS) {
+  if (whm_check_email($email) !== WHM_Constant::WHM_SUCCESS) {
     form_set_error('email', t('This e-mail address is invalid. Please check it and try again.'));
   }
 
@@ -203,7 +203,7 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
     form_set_error('pwd2', t('The passwords do not match.'));
   }
   $pwd = $form_values['values']['pwd1'];
-  if (whm_check_password($pwd) !== Constant::WHM_SUCCESS) {
+  if (whm_check_password($pwd) !== WHM_Constant::WHM_SUCCESS) {
     form_set_error('pwd1', t('This password is invalid. Please enter a password of at least six characters in length.'));
   }
   
@@ -213,10 +213,10 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
   else {
     $domain = $form_values['values']['domain'];
     $res = whm_check_domain($domain);
-    if ($res == Constant::WHM_DOMAIN_TAKEN) {
+    if ($res == WHM_Constant::WHM_DOMAIN_TAKEN) {
       form_set_error('domain', t('This domain name is already registered with this server.'));
     }
-    elseif ($res !== Constant::WHM_SUCCESS) {
+    elseif ($res !== WHM_Constant::WHM_SUCCESS) {
       form_set_error('domain', t('This domain name is invalid.'));
     }
   }
@@ -257,7 +257,7 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
     'pass' => $pwd, 
     'plan' => $plan
   ));
-  if ($rv === Constant::WHM_SUCCESS) {
+  if ($rv === WHM_Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />', array('%user' => $user, '%domain' => $domain, '%plan' => $plan)));
     $form_values['redirect'] = 'admin/whm/accounts/list';
     return;
@@ -319,16 +319,16 @@ function whm_ui_edit_account_form_validate($form, &$form_state) {
   }
   elseif ($form_state['values']['user'] != $form_state['values']['current_user']) {
     $res = whm_check_username($form_state['values']['user']);
-    if ($res == Constant::WHM_USERNAME_TAKEN) {
+    if ($res == WHM_Constant::WHM_USERNAME_TAKEN) {
       form_set_error('user', t('This username is already taken. Please choose again.'));
     }
-    elseif ($res == Constant::WHM_USERNAME_INVALID) {
+    elseif ($res == WHM_Constant::WHM_USERNAME_INVALID) {
       form_set_error('user', t('This username is invalid. Please choose a username that contains only letters and numbers.'));
     }
-    elseif ($res == Constant::WHM_USERNAME_TOOLONG) {
-      form_set_error('user', t('This username is too long. Please choose a username with %len or fewer characters.', array('%len' => Constant::WHM_MAX_USERNAME_LEN)));
+    elseif ($res == WHM_Constant::WHM_USERNAME_TOOLONG) {
+      form_set_error('user', t('This username is too long. Please choose a username with %len or fewer characters.', array('%len' => WHM_Constant::WHM_MAX_USERNAME_LEN)));
     }
-    elseif ($res !== Constant::WHM_SUCCESS) {
+    elseif ($res !== WHM_Constant::WHM_SUCCESS) {
       form_set_error('user', t('There was a problem with this username.'));
     }
   }
@@ -344,7 +344,7 @@ function whm_ui_edit_account_form_validate($form, &$form_state) {
       form_set_error('pwd2', t('The passwords do not match.'));
     }
     $pwd = $form_state['values']['pwd1'];
-    if (whm_check_password($pwd) !== Constant::WHM_SUCCESS) {
+    if (whm_check_password($pwd) !== WHM_Constant::WHM_SUCCESS) {
       form_set_error('pwd1', t('This password is invalid. Please enter a password of at least six characters in length.'));
     }
   }
@@ -354,10 +354,10 @@ function whm_ui_edit_account_form_validate($form, &$form_state) {
   }
   elseif ($form_state['values']['domain'] != $form_state['values']['current_domain']) {
     $res = whm_check_domain($form_state['values']['domain']);
-    if ($res == Constant::WHM_DOMAIN_TAKEN) {
+    if ($res == WHM_Constant::WHM_DOMAIN_TAKEN) {
       form_set_error('domain', t('This domain name is already registered with this server.'));
     }
-    elseif ($res !== Constant::WHM_SUCCESS) {
+    elseif ($res !== WHM_Constant::WHM_SUCCESS) {
       form_set_error('domain', t('This domain name is invalid.'));
     }
   }
@@ -383,16 +383,16 @@ function whm_ui_edit_account_form_submit($form, &$form_state) {
 
   if (!empty($new_pass)) {
     $rv = whm_change_password($current_user, $new_pass);
-    if ($rv === Constant::WHM_PASSWORD_INVALID) {
+    if ($rv === WHM_Constant::WHM_PASSWORD_INVALID) {
       form_set_error('pwd1', t('The password %pass was invalid. Please try again with a valid password.', array('%pass' => $new_pass)));
       return;
     }
-    elseif ($rv !== Constant::WHM_SUCCESS) {
+    elseif ($rv !== WHM_Constant::WHM_SUCCESS) {
       form_set_error('pwd1', 'An error occured while trying to update the password. Please check the specified values and try again.<br /> ' .
         'The WHM server responded with: ' . $rv);
       return;
     }
-    elseif ($rv === Constant::WHM_SUCCESS) {
+    elseif ($rv === WHM_Constant::WHM_SUCCESS) {
       drupal_set_message(t('Successfully updated password.'));
     }
   }
@@ -406,12 +406,12 @@ function whm_ui_edit_account_form_submit($form, &$form_state) {
   }
 
   $rv = whm_modify_account($current_user, $changed);
-  if ($rv === Constant::WHM_SUCCESS) {
+  if ($rv === WHM_Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully updated account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i>', array('%user' => $new_user, '%domain' => $new_domain)));
     $form_state['redirect'] = 'admin/whm/accounts/list';
     return;
   }
-  elseif ($rv === Constant::WHM_USERNAME_TAKEN) {
+  elseif ($rv === WHM_Constant::WHM_USERNAME_TAKEN) {
     form_set_error('account', t('The username %user was already taken. Please try again with another username.', array('%user' => $new_user)));
   }
   else {
@@ -777,7 +777,7 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
   }
   _whm_ui_unset_form_api($options);
   $rv = whm_create_plan($form_values['values']['name'], $options);
-  if ($rv === Constant::WHM_SUCCESS) {
+  if ($rv === WHM_Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully created plan %plan', array(
       '%plan' => $form_values['values']['name']
     )));
@@ -1026,7 +1026,7 @@ function whm_ui_edit_plan_form_submit($form, &$form_state) {
   }
 
   $rv = whm_modify_plan($current_name, $changed);
-  if ($rv === Constant::WHM_SUCCESS) {
+  if ($rv === WHM_Constant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully updated plan: <i>%plan</i>', array('%plan' => $new_name)));
     $form_state['redirect'] = 'admin/whm/plans/list';
     return;

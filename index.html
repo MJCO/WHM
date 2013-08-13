@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>WHM by MJCO</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>WHM</h1>
+        <h2>Drupal 7 WHM integration module</h2>
+        <a href="https://github.com/MJCO/WHM" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2>
+<a name="whm-module-for-drupal-webhost-manager-whm-integration" class="anchor" href="#whm-module-for-drupal-webhost-manager-whm-integration"><span class="octicon octicon-link"></span></a>WHM module for Drupal: WebHost Manager (WHM) Integration</h2>
+
+<ul>
+<li>Original Author: Joe Turgeon [<a href="http://arithmetric.com">http://arithmetric.com</a>]</li>
+<li>Current Author: Mikey O'Toole (<a href="http://mjco.ltd.uk">http://mjco.ltd.uk</a>)</li>
+<li>Original Sponsorship: Sundays Energy [<a href="http://sundaysenergy.com">http://sundaysenergy.com</a>]</li>
+<li>Current Sponsorship: MJCO [<a href="http://mjco.ltd.uk">http://mjco.ltd.uk</a>]</li>
+<li>Licensed under GPL v3</li>
+</ul><h2>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>INTRODUCTION</h2>
+
+<p>WebHost Manager (WHM) is a commercial server administration system
+that manages hosted cPanel accounts. This module provides a user and
+program interface to some of WHM's reseller functions, enabling Drupal
+administrators, authorized users, or other modules to list, create,
+and (un)suspend cPanel accounts.</p>
+
+<p>This project is not authorized or supported by cPanel. For information
+on the cPanel or WHM products, see:
+<a href="http://www.cpanel.net">http://www.cpanel.net</a></p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>INSTALLATION</h2>
+
+<p>Download the latest release of this module from:
+<a href="http://drupal.org/project/whm">http://drupal.org/project/whm</a> or <a href="http://github.com/MikeyMJCO/WHM">http://github.com/MikeyMJCO/WHM</a></p>
+
+<p>Uncompress the archive in your modules directory (sites/all/modules or
+sites/[name]/modules).</p>
+
+<p>In Drupal, go to the modules page (Site building &gt;&gt; Modules) and
+enable the WHM module listed under the Hosting category.</p>
+
+<p>To use the module, it must be configured with a WHM host and reseller
+account. Go to the module's settings form (Admin &gt; WHM or example.com/admin/whm)
+and enter the hostname of your WHM server, the username for a reseller
+account, and its remote access key. The remote access key is generated
+by WHM, and can be found under 'Setup Remote Access Key' in the WHM
+interface. Note: In WHM, the reseller account must be granted specific
+permission to list, create, and suspend accounts.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>FEATURES</h2>
+
+<p>This module enables three WHM functions through a user and programming
+interface: listing, creating, and (un)suspending accounts managed by
+the specified reseller. These functions are accessible to authorized 
+users through the Administer &gt;&gt; WHM menu.</p>
+
+<p>The list accounts page displays the username, domain name, and hosting
+plan. Additionally, it allows accounts to be suspended or unsuspended.
+The create account page allows a new account to be created with a
+specified username, contact e-mail address, password, domain name, and
+hosting plan.</p>
+
+<p>User access to these functions is limited by the permissions set in
+User management &gt;&gt; Access control under the WHM module. Access can be
+granted by function (to list accounts, to create a new account, or 
+to (un)suspend accounts).</p>
+
+<p>Additionally, this module provides a direct programming interface to
+these WHM functions. Note: There are no access restrictions to the
+functions, as it is expected that programs utilizing these functions
+would implement their own permissions system.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/MJCO/WHM/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/MJCO/WHM/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/MJCO/WHM"></a> is maintained by <a href="https://github.com/MJCO">MJCO</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

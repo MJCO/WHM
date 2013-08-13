@@ -256,11 +256,11 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
   ));
   if ($rv === WHMConstant::WHM_SUCCESS) {
     drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />',
-    array(
-      '%user' => $user,
-      '%domain' => $domain,
-      '%plan' => $plan,
-    ),
+      array(
+        '%user' => $user,
+        '%domain' => $domain,
+        '%plan' => $plan,
+      )
     ));
     $form_values['redirect'] = 'admin/whm/accounts/list';
     return;

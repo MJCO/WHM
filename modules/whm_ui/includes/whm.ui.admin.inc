@@ -956,7 +956,7 @@ function whm_ui_edit_plan_form($form, &$form_state, $plan) {
  */
 function whm_ui_edit_plan_form_validate($form_id, &$form_values) {
   $whmuser = variable_get('whm_username', '');
-  $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name']; 
+  $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name'];
 }
 
 /**
@@ -1013,10 +1013,10 @@ function whm_ui_edit_plan_form_submit($form, &$form_state) {
   }
   if ($new_maxpop != $current_maxpop) {
     $changed['maxpop'] = $new_maxpop;
-  }  
+  }
   if ($new_maxlists != $current_maxlists) {
     $changed['maxlists'] = $new_maxlists;
-  } 
+  }
   if ($new_maxsql != $current_maxsql) {
     $changed['maxsql'] = $new_maxsql;
   }
@@ -1050,9 +1050,13 @@ function whm_ui_edit_plan_form_submit($form, &$form_state) {
   if ($new_language != $current_language) {
     $changed['language'] = $new_language;
   }
-  
+
   if (count($changed) == 0) {
-      drupal_set_message(t('Plan %plan was not updated. No updated values were provided.', array('%plan' => $current_name)));
+    drupal_set_message(t('Plan %plan was not updated. No updated values were provided.',
+      array(
+        '%plan' => $current_name,
+      )
+    ));
     $form_state['redirect'] = 'admin/whm/plans/list';
     return;
   }
@@ -1064,7 +1068,7 @@ function whm_ui_edit_plan_form_submit($form, &$form_state) {
     return;
   }
   else {
-    $error = t('An error occured while trying to update the account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv',array('!rv' => $rv));
+    $error = t('An error occured while trying to update the account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv', array('!rv' => $rv));
     form_set_error('plan', $error);
   }
 }
@@ -1077,15 +1081,15 @@ function whm_ui_confirm_delete_plan($form, &$form_state, $plan_name) {
   return confirm_form(
     $form,
     t('Are you sure you want to delete the plan %name?', array(
-      '%name' => _whm_theme_plan_name($plan_name)
+      '%name' => _whm_theme_plan_name($plan_name),
     )),
     'admin/whm/plans/list',
     t('This will delete the selected plan/package from the WHM server and cannot be undone, be certain you are absolutely sure!'),
-    t('Delete'), 
-    t('Cancel')
+    t('Delete'),
+    t('Cancel'),
   );
 }
-  
+
 /**
  * Submit function for the confirm form for user deletion.
  */
@@ -1101,8 +1105,7 @@ function whm_ui_confirm_delete_plan_submit($form, &$form_state) {
 }
 
 /**
- * Trims out the default form api elements so that values can be passed to whm
- * API without modification.
+ * Trims out default FAPI elements so values can be passed API without modification.
  */
 function _whm_ui_unset_form_api(&$form_values) {
   unset($form_values['op']);
@@ -1111,4 +1114,3 @@ function _whm_ui_unset_form_api(&$form_values) {
   unset($form_values['form_token']);
   unset($form_values['form_id']);
 }
-

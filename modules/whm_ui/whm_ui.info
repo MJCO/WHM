@@ -1,7 +1,5 @@
 name = WHM UI
 description = Provides a UI that interfaces with the WHM API.
 package = Hosting
-dependencies[] = whm
+dependencies[] = WHM
 core = 7.x
-php = 5.2
-

@@ -2,12 +2,11 @@
 
 /**
  * @file
- *
  * Provide functions to install and uninstall the WHM module.
  */
 
 /**
- * Implementation of hook_uninstall().
+ * Implementats of hook_uninstall().
  */
 function whm_uninstall() {
   variable_del('whm_hostname');

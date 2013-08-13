@@ -65,14 +65,10 @@ function whm_version() {
 }
 
 /**
- * This function will display your server's load average. 
- * It displays the average at 3 different points in time: 
- * the average of the last minute, the last 5 minutes, and the last 15 minutes.
- * The average value is expressed in decimal form. 
- * For example, a value of .18 would mean you were using 18% of your server's CPU.
+ * This function will display your server's load average.
  */
 function whm_average_load() {
-  // TODO: depending on WHM version also call systemloadavg
+  // TODO: depending on WHM version also call systemloadavg.
   $result = _whm_command('loadavg');
   return $result;
 }
@@ -90,8 +86,7 @@ function whm_available_languages() {
  */
 
 /**
- * This function creates a hosting account and sets up its associated domain 
- * information.
+ * This function creates a hosting account and sets up its associated information.
  * 
  * @param string $user
  *   Username for the account. Example: user 
@@ -145,7 +140,7 @@ function whm_available_languages() {
  *       <li>0 — no.</li>
  *     </ul>
  *   </li> 
- *   <li>contactemail (string) — Contact email address for the account. Example: user@otherdomain.tld</li>
+ *   <li>contactemail (string) — Contact email address for the account.</li>
  *   <li>cpmod (string) — cPanel theme name. Example: x3</li>
  *   <li>maxftp (string) — Maximum number of FTP accounts. Allowed values:
  *     <ul>

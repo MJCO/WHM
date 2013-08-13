@@ -39,7 +39,7 @@ function whm_admin_settings() {
     '#options' => array(
       '2086' => t('Insecure (Port: 2086)'),
       '2087' => t('Secure (Port: 2087)'),
-    )
+    ),
   );
   $form['host']['reseller'] = array(
     '#type' => 'checkbox',

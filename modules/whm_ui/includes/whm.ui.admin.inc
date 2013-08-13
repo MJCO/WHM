@@ -263,8 +263,8 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
     return;
   }
   else {
-    form_set_error('account', t('An error occured while trying to create the new account. Please check the specified values and try again.') . '<br /> ' .
-      t('The WHM server responded with: !rv', array('!rv' => $rv));
+    $error = t('An error occured while trying to create the new account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv', array('!rv' => $rv));
+    form_set_error('account', $error);
   }
 }
 
@@ -388,8 +388,8 @@ function whm_ui_edit_account_form_submit($form, &$form_state) {
       return;
     }
     elseif ($rv !== WHM_Constant::WHM_SUCCESS) {
-      form_set_error('pwd1', t('An error occured while trying to update the password. Please check the specified values and try again.') . '<br />' .
-        t('The WHM server responded with: !rv', array('!rv' => $rv));
+      $error = t('An error occured while trying to update the password. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv', array('!rv' => $rv));
+      form_set_error('pwd1', $error);
       return;
     }
     elseif ($rv === WHM_Constant::WHM_SUCCESS) {
@@ -415,8 +415,8 @@ function whm_ui_edit_account_form_submit($form, &$form_state) {
     form_set_error('account', t('The username %user was already taken. Please try again with another username.', array('%user' => $new_user)));
   }
   else {
-    form_set_error('account', t('An error occured while trying to update the account. Please check the specified values and try again.') . '<br /> ' .
-      t('The WHM server responded with: !rv', array('!rv' => $rv));
+    $error = t('An error occured while trying to update the account. Please check the specified values and try again.') . '<br /> ' . t('The WHM server responded with: !rv', array('!rv' => $rv));
+    form_set_error('account', $error);
   }
 }
 
@@ -784,8 +784,8 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
     return 'admin/whm/plans/list';
   }
   else {
-    form_set_error('plan', t('An error occured while trying to create the new account. Please check the specified values and try again.'));
-    form_set_error('plan', t('The WHM server responded with: !rv', array('!rv' => $rv));
+    $error = t('An error occured while trying to create the new account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv', array('!rv' => $rv)); 
+    form_set_error('plan', $error);
   }
 }
 
@@ -1032,15 +1032,15 @@ function whm_ui_edit_plan_form_submit($form, &$form_state) {
     return;
   }
   else {
-    form_set_error('plan', t('An error occured while trying to update the account. Please check the specified values and try again.') . '<br />' .
-      t('The WHM server responded with: !rv', '!rv' => $rv));
+    $error = t('An error occured while trying to update the account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv',array('!rv' => $rv));
+    form_set_error('plan', $error);
   }
 }
 
 /**
  * Definition for the plan deletion form.
  */
-function whm_ui_confirm_delete_plan(&$form_state, $plan_name) {
+function whm_ui_confirm_delete_plan($form, &$form_state, $plan_name) {
   $form['_whm_plan'] = array('#type' => 'value', '#value' => $plan_name);
   return confirm_form(
     $form,
@@ -1048,7 +1048,7 @@ function whm_ui_confirm_delete_plan(&$form_state, $plan_name) {
       '%name' => _whm_theme_plan_name($plan_name)
     )),
     'admin/whm/plans/list',
-    t('TODO - Add a description.'),
+    t('This will delete the selected plan/package from the WHM server and cannot be undone, be certain you are absolutely sure!'),
     t('Delete'), 
     t('Cancel')
   );

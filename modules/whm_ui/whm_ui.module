@@ -145,7 +145,7 @@ function whm_ui_menu() {
     'file' => 'includes/whm.ui.admin.inc',
     'weight' => 1,
   );
-  $items['admin/whm/plans/plan/%'] = array(
+  /*$items['admin/whm/plans/plan/%'] = array(
     'title' => 'View Plan',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('whm_ui_view_plan_form', 4),
@@ -156,7 +156,7 @@ function whm_ui_menu() {
   $items['admin/whm/plans/plan/%/view'] = array(
     'title' => 'View Plan',
     'type' => MENU_DEFAULT_LOCAL_TASK,
-  );
+  );*/
   $items['admin/whm/plans/plan/%/edit'] = array(
     'title' => 'Edit',
     'page callback' => 'drupal_get_form',

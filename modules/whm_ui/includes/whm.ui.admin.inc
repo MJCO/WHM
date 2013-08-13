@@ -235,7 +235,7 @@ function whm_ui_create_account_form_validate($form_id, &$form_values) {
       }
     }
     if (!$plan_exists) {
-      form_set_error('plan', t('Please select an existing hosting plan for this account. Alternatively <a href="!uri" title="Create a Plan">Create a Plan</a>')'!uri' => 'admin/whm/plans/create');
+      form_set_error('plan', t('Please select an existing hosting plan for this account. Alternatively <a href="!uri" title="Create a Plan">Create a Plan</a>', array('!uri' => 'admin/whm/plans/create')));
     }
   }
 }
@@ -583,13 +583,14 @@ function whm_ui_list_plans_form() {
     foreach ($plans as $plan) {
       $row = array(
         _whm_theme_plan_name($plan['name']),
+        
       );
       if ($user_can_delete) {
-        $operations[] = l(t('Delete'), "admin/whm/plans/plan/{$plan['name']}/delete");
+        $operations = l(t('Delete'), "admin/whm/plans/plan/{$plan['name']}/delete");
       }
       
       if ($user_can_edit) {
-        $operations .= ' ' . l(t('Edit'), "admin/whm/accounts/account/{$plan['name']}/edit");
+        $operations .= ' ' . l(t('Edit'), "admin/whm/plans/plan/{$plan['name']}/edit");
       }
       if ($user_can_delete || $user_can_edit) {
         $row[] = $operations;
@@ -722,7 +723,7 @@ function _whm_ui_plan_form(&$form_state = NULL) {
     '#type' => 'select',
     '#title' => t('cPanel Theme'),
     '#description' => t('The default theme for the package.'),
-    '#default_value' => '',
+    '#default_value' => empty($form_state) ? '' : $form_state['values']['cpmod'],
     '#options' => array(
       '' => t('TODO - Get themes'),
     ),
@@ -747,7 +748,7 @@ function _whm_ui_plan_form(&$form_state = NULL) {
   );
   $form['plan']['submit'] = array(
     '#type' => 'submit',
-    '#value' => empty($form_state) ? t('Create plan') : t('Edit plan')),
+    '#value' => empty($form_state) ? t('Create plan') : t('Edit plan'),
   );
   return $form;
 }
@@ -792,24 +793,45 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
 function whm_ui_edit_plan_form($form, &$form_state, $plan) {
 
   $res = whm_plan_info($plan);
-  $plan_data = $res[0];
+  $plan_data = $res;
+  if ($plan_data['IP'] == 'y') {
+    $ip = 1;
+  } else {
+    $ip = 0;
+  }
+  if ($plan_data['HASSHELL'] == 'y') {
+    $hasshell = 1;
+  } else {
+    $hasshell = 0;
+  }
+  if ($plan_data['FRONTPAGE'] == 'y') {
+    $frontpage = 1;
+  } else {
+    $frontpage = 0;
+  }
+  if ($plan_data['CGI'] == 'y') {
+    $cgi = 1;
+  } else {
+    $cgi = 0;
+  }
   $current_state = array('values' => array(
     'name' => $plan_data['name'],
-    'quota' => $plan_data['quota'],
-    'bwlimit' => $plan_data['bwlimit'],
-    'maxftp' => $plan_data['maxftp'],
-    'maxpop' => $plan_data['maxpop'],
-    'maxlists' => $plan_data['maxlists'],
-    'maxsql' => $plan_data['maxsql'],
-    'maxsub' => $plan_data['maxsub'],
-    'maxpark' => $plan_data['maxpark'],
-    'maxaddon' => $plan_data['ip'],
-    'hasshell' => $plan_data['hasshell'],
-    'frontpage' => $plan_data['frontpage'],
-    'cgi' => $plan_data['cgi'],
-    'cpmod' => $plan_data['cpmod'],
-    'featurelist' => $plan_data['featurelist'],
-    'featurelist' => $plan_data['language'],
+    'quota' => $plan_data['QUOTA'],
+    'bwlimit' => $plan_data['BWLIMIT'],
+    'maxftp' => $plan_data['MAXFTP'],
+    'maxpop' => $plan_data['MAXPOP'],
+    'maxlists' => $plan_data['MAXLST'],
+    'maxsql' => $plan_data['MAXSQL'],
+    'maxsub' => $plan_data['MAXSUB'],
+    'maxpark' => $plan_data['MAXPARK'],
+    'maxaddon' => $plan_data['MAXADDON'],
+    'ip' => $ip,
+    'hasshell' => $hasshell,
+    'frontpage' => $frontpage,
+    'cgi' => $cgi,
+    'cpmod' => $plan_data['CPMOD'],
+    'featurelist' => $plan_data['FEATURELIST'],
+    'language' => $plan_data['LANG'],
   ));
   $form_state['values'] = array_merge($current_state['values'], $form_state['input']);
 
@@ -908,11 +930,11 @@ function whm_ui_edit_plan_form_validate($form_id, &$form_values) {
   $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name']; 
 }
 
-function whm_ui_edit_plan_form_submit($form_id, $form_values) {
+function whm_ui_edit_plan_form_submit($form, &$form_state) {
   $new_name = $form_state['values']['name'];
   $current_name = $form_state['values']['current_name'];
-  $new_quota = $form_quota['values']['domain'];
-  $current_quota = $form_quota['values']['current_domain'];
+  $new_quota = $form_state['values']['quota'];
+  $current_quota = $form_state['values']['current_quota'];
   $new_bwlimit = $form_state['values']['bwlimit'];
   $current_bwlimit = $form_state['values']['current_bwlimit'];
   $new_maxftp = $form_state['values']['maxftp'];
@@ -1005,8 +1027,8 @@ function whm_ui_edit_plan_form_submit($form_id, $form_values) {
 
   $rv = whm_modify_plan($current_name, $changed);
   if ($rv === Constant::WHM_SUCCESS) {
-    drupal_set_message(t('Successfully updated plan: <i>%plan</i>', array('%plan' => $new_plan)));
-    $form_state['redirect'] = 'admin/whm/accounts/list';
+    drupal_set_message(t('Successfully updated plan: <i>%plan</i>', array('%plan' => $new_name)));
+    $form_state['redirect'] = 'admin/whm/plans/list';
     return;
   }
   else {

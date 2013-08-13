@@ -651,10 +651,13 @@ function whm_list_plans() {
   return $data['package'];
 }
 
-function whm_account_info($plan) {
-  $result = _whm_command('listpkgs');
-  if ($result['name'] == $plan) {
-    return $result['package'];
+function whm_plan_info($plan) {
+  $data = _whm_command('listpkgs');
+  $results = $data['package'];
+  foreach ($results as $result) {
+    if ($result['name'] = $plan) {
+      return $result;
+    }
   }
   return Constant::WHM_ERROR;
 }

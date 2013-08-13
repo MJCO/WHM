@@ -17,7 +17,7 @@ class WHMConstant {
   // Generic error.
   const WHM_ERROR = -1;
   // Could not connect to WHM server.
-  const WHM_ERROR_CONNECT =  -2;
+  const WHM_ERROR_CONNECT = -2;
   // Authentication failed.
   const WHM_ERROR_AUTH = -3;
   // Curl not installed.
@@ -65,12 +65,14 @@ function whm_version() {
 }
 
 /**
- * This function will display your server's load average. It displays the average at 3 different points in time: the 
- * average of the last minute, the last 5 minutes, and the last 15 minutes. The average value is expressed in decimal 
- * form. For example, a value of .18 would mean you were using 18% of your server's computing power.
+ * This function will display your server's load average. 
+ * It displays the average at 3 different points in time: 
+ * the average of the last minute, the last 5 minutes, and the last 15 minutes.
+ * The average value is expressed in decimal form. 
+ * For example, a value of .18 would mean you were using 18% of your server's CPU.
  */
 function whm_average_load() {
-  // TODO depending on WHM version also call systemloadavg
+  // TODO: depending on WHM version also call systemloadavg
   $result = _whm_command('loadavg');
   return $result;
 }
@@ -83,9 +85,9 @@ function whm_available_languages() {
   return $result;
 }
 
-/*************************************
+/**
  * Account functions
- * ***********************************/
+ */
 
 /**
  * This function creates a hosting account and sets up its associated domain 
@@ -97,9 +99,9 @@ function whm_available_languages() {
  *   Domain name. Example: domain.tld
  * @param array $options
  *   The following variables are optional: 
- *   <li>plan (string) — Package to use for account creation. Example: reseller_gold</li> 
+ *   <li>plan (string) — Package to use for account creation.</li> 
  *   <li>
- *     pkgname (string) — Name of a new package to be created based on the settings used. 
+ *     pkgname (string) — Name of a new package to be created. 
  *     Example: reseller_silver
  *   </li>
  *   <li>savepkg (boolean) — Save the settings used as a new package.
@@ -109,7 +111,7 @@ function whm_available_languages() {
  *     </ul>
  *   </li> 
  *   <li>
- *     featurelist (string) — Name of the feature list to be used when creating a new package. 
+ *     featurelist (string) — Name of the feature list to be used.. 
  *     Example: no_ftp_100mb_gold
  *   </li>
  *   <li>quota (integer) — Disk space quota in Megabytes. Allowed values:
@@ -131,7 +133,7 @@ function whm_available_languages() {
  *       <li>0 — no.</li>
  *     </ul>
  *   </li> 
- *   <li>frontpage (boolean) — Whether or not the domain has FrontPage extensions installed.
+ *   <li>frontpage (boolean) — Whether or not the domain has FrontPage.
  *     <ul>
  *       <li>1 — yes.</li>
  *       <li>0 — no.</li>
@@ -145,7 +147,7 @@ function whm_available_languages() {
  *   </li> 
  *   <li>contactemail (string) — Contact email address for the account. Example: user@otherdomain.tld</li>
  *   <li>cpmod (string) — cPanel theme name. Example: x3</li>
- *   <li>maxftp (string) — Maximum number of FTP accounts the user can create. Allowed values:
+ *   <li>maxftp (string) — Maximum number of FTP accounts. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -153,7 +155,7 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>maxsql (string) — Maximum number of SQL databases the user can create. Allowed values:
+ *   <li>maxsql (string) — Maximum number of SQL databases. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -161,7 +163,7 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>maxpop (string) — Maximum number of email accounts the user can create. Allowed values:
+ *   <li>maxpop (string) — Maximum number of email accounts. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -169,7 +171,7 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>maxlst (string) — Maximum number of mailing lists the user can create. Allowed values:
+ *   <li>maxlst (string) — Maximum number of mailing lists. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -177,7 +179,7 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>maxsub (string) — Maximum number of subdomains the user can create. Allowed values:
+ *   <li>maxsub (string) — Maximum number of subdomains. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -185,7 +187,7 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>maxpark (string) — Maximum number of parked domains the user can create. Allowed values:
+ *   <li>maxpark (string) — Maximum number of parked domains. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -193,7 +195,7 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>maxaddon (string) — Maximum number of addon domains the user can create. Allowed values:
+ *   <li>maxaddon (string) — Maximum number of addon domains. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999.</li>
  *       <li>0 is unlimited.</li>
@@ -201,59 +203,13 @@ function whm_available_languages() {
  *       <li>null</li>
  *     </ul>
  *   </li> 
- *   <li>bwlimit (string) — Bandiwdth limit in Megabytes. Must be a number from 0 to 999999.
+ *   <li>bwlimit (string) — Bandiwdth limit in Megabytes. Must between 0 and 999999.
  *     <ul>
  *       <li>0 is unlimited.</li>
  *     </ul> 
  *   </li>
  *   <li>customip (string) — Specific IP address for the site.</li>
- *   <li>language (string) — Language to use in the account's cPanel interface. Example: spanish-utf8</li>
- *   <li>
- *     useregns (boolean) — Use the registered nameservers for the domain instead of the ones configured on the 
- *     server.
- *     <ul>
- *       <li>1 — yes.</li>
- *       <li>0 — no.</li>
- *     </ul>
- *   </li> 
- *   <li>hasuseregns (boolean) — Set to 1 if you are using the above option.</li>
- *   <li>reseller (boolean) — Give reseller privileges to the account.
- *     <ul>
- *       <li>1 — yes.</li>
- *       <li>0 — no.</li>
- *     </ul>
- *   </li> 
- *   <li>forcedns (boolean) — Overwrite current DNS Zone if a DNS Zone already exists.
- *     <ul>
- *       <li>1 — yes.</li>
- *       <li>0 — no.</li>
- *     </ul>
- *   </li> 
- *   <li>
- *     mxcheck — Determines how the server will handle incoming mail for this domain. This variable can be set to 
- *     one of the following: 
- *     <ul>
- *       <li>
- *         local — The domain will accept mail, regardless of whether a higher-priority mail exchanger has been 
- *         designated on the WHM Edit MX Entry screen. (If a higher-priority mail exchanger exists, mail will be 
- *         routed to both domains.)
- *       </li>
- *       <li>
- *         secondary (or backup) — The domain will act as a backup mail exchanger, holding mail in queue if the 
- *         primary exchanger becomes unavailable. 
- *         Note: You will still need to use the WHM Edit MX Entry screen to configure the primary MX entry to point to 
- *         the appropriate exchanger.
- *       </li>
- *       <li> 
- *         remote — The domain will not accept mail, instead sending it to the primary mail exchanger. 
- *         Note: You will still need to use the WHM Edit MX Entry screen to configure the primary MX entry to point to 
- *         the appropriate exchanger.
- *       </li>
- *       <li>
- *         auto — The server will automatically detect, and use, the configuration set on the WHM Edit MX Entry screen.
- *       </li>
- *     </ul>
- *   </li>
+ *   <li>language (string) — Language to use. Example: spanish-utf8</li>
  */
 function whm_create_account($user, $domain, $options = array()) {
   $rv = whm_check_username($user);

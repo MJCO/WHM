@@ -243,7 +243,7 @@ function whm_create_account($user, $domain, $options = array()) {
   $result = _whm_command('createacct', $options);
   if ($result['result'][0]['status'] == 1) {
     return WHMConstant::WHM_SUCCESS;
-  } 
+  }
   return $result['result'][0]['statusmsg'];
 }
 
@@ -270,7 +270,7 @@ function whm_change_password($user, $pass) {
 }
 
 /**
- * This function modifies the bandwidth usage (transfer) limit for a specific account.
+ * This function modifies the bandwidth usage limit for a specific account.
  *  
  * @param string $user
  *   Name of the user for whom you wish to modify the bandwidth usage limit.
@@ -308,17 +308,18 @@ function whm_list_accounts($search_type = NULL, $search = NULL) {
 /**
  * This function modifies settings for an account.
  *  
- * <b>Important:</b> Instead of using this function call, we recommend changing the account's package with the 
- * Upgrade/Downgrade an Account feature. When you modify an account using this API function, the changes are in 
- * danger of being overwritten when the account's package is modified.
+ * <b>Important:</b> Instead of using this function call, 
+ * we recommend changing packages with the Upgrade/Downgrade Account feature.
+ * When you modify an account using this API function,
+ * the changes are in danger of being lost when the package is modified.
  * 
  * @param $user
  *   User name of the account. Example: user
  * @param array $options
  *   The following variables are optional: 
  *   <li>domain (string) — Domain name. Example: domain.tld</li>
- *   <li>newuser (string) — Used when changing the username of an account. This will be the new username.</li> 
- *   <li>owner (string) — Change the owner of the account to the specified owner.</li>
+ *   <li>newuser (string) — Used when changing the username of an account.</li> 
+ *   <li>owner (string) — Change the owner of the account.</li>
  *   <li>CPTHEME (string) — cPanel theme name. Example: x3</li>
  *   <li>HASCGI (boolean) — Whether or not the domain has CGI access.
  *     <ul>
@@ -326,54 +327,54 @@ function whm_list_accounts($search_type = NULL, $search = NULL) {
  *       <li>0 — no.</li>
  *     </ul>
  *   </li>
- *   <li>LANG (string) — Language to use in the account's cPanel interface. Example: spanish-utf8</li> 
+ *   <li>LANG (string) — Language to use in the account's cPanel interface.</li> 
  *   <li>
- *     LOCALE (string) — Locale to use in the account's cPanel interface. Example: en 
- *     Note: This input variable is only compatible with WHM version 11.25 and later.
+ *     LOCALE (string) — Locale to use in the account's cPanel interface. 
+ *     Note: Only compatible with WHM version 11.25 and later.
  *   </li> 
- *   <li>MAXFTP (string) — Maximum number of FTP accounts the user can create. Allowed values:
+ *   <li>MAXFTP (string) — Maximum number of FTP accounts. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>MAXSQL (string) — Maximum number of SQL databases the user can create. Allowed values: 
+ *   <li>MAXSQL (string) — Maximum number of SQL databases. Allowed values: 
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>MAXPOP (string) — Maximum number of email accounts the user can create. Allowed values: 
+ *   <li>MAXPOP (string) — Maximum number of email accounts. Allowed values: 
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>MAXLST (string) — Maximum number of mailing lists the user can create. Allowed values: 
+ *   <li>MAXLST (string) — Maximum number of mailing lists. Allowed values: 
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>MAXSUB (string) — Maximum number of subdomains the user can create. Allowed values:
+ *   <li>MAXSUB (string) — Maximum number of subdomains. Allowed values:
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>MAXPARK (string) — Maximum number of parked domains the user can create. Allowed values: 
+ *   <li>MAXPARK (string) — Maximum number of parked domains. Allowed values: 
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 
  *       <li>null</li>
  *     </ul>
  *   </li>
- *   <li>MAXADDON (string) — Maximum number of addon domains the user can create. Allowed values: 
+ *   <li>MAXADDON (string) — Maximum number of addon domains. Allowed values: 
  *     <ul>
  *       <li>A number from 0 to 999999. 0 is unlimited.</li> 
  *       <li>unlimited</li> 

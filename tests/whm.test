@@ -17,11 +17,13 @@ class WHMTestCase extends DrupalWebTestCase {
       'group' => t('WHM'),
     );
   }
-
+  /**
+   * Setup function
+   */
   public function setUp() {
     parent::setUp();
   }
-  
+
   /**
    * Test for average load function.
    */
@@ -35,7 +37,7 @@ class WHMTestCase extends DrupalWebTestCase {
     $avg = $load['fifteen'];
     $this->assertNotNull($avg, "Responded with $avg");
   }
-  
+
   /**
    * Test for hostname function.
    */
@@ -43,7 +45,7 @@ class WHMTestCase extends DrupalWebTestCase {
     $host = whm_hostname();
     $this->assertNotNull($host, "Responded with $host");
   }
-  
+
   /**
    * Test for version function.
    */
@@ -51,5 +53,4 @@ class WHMTestCase extends DrupalWebTestCase {
     $version = whm_version();
     $this->assertNotNull($version, "Responded with $version");
   }
-
 }

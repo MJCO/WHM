@@ -6,7 +6,7 @@
  */
 
 /**
- * Implementats of hook_uninstall().
+ * Implements of hook_uninstall().
  */
 function whm_uninstall() {
   variable_del('whm_hostname');

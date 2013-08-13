@@ -1105,7 +1105,7 @@ function whm_ui_confirm_delete_plan_submit($form, &$form_state) {
 }
 
 /**
- * Trims out default FAPI elements so values can be passed API without modification.
+ * Strips default elements so values can be passed to API without modification.
  */
 function _whm_ui_unset_form_api(&$form_values) {
   unset($form_values['op']);

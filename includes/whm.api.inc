@@ -2,34 +2,50 @@
 
 /**
  * @file
- * Provides API functions to cPanel's WebHost Manager (WHM) server administration software.
+ * Integration with cPanel's WebHost Manager (WHM) software API.
  * 
- * Note: Functions do not check permissions, as it can be used by other modules respecting their permissions system.
+ * Note: Functions do not check permissions.
  */
 
-class WHM_Constant {
+/**
+ * Constants defining error codes.
+ */
+class WHMConstant {
 
-  // error codes
-  const WHM_SUCCESS =           1;   // successful return value
-  const WHM_ERROR =            -1;   // generic error
-  const WHM_ERROR_CONNECT =    -2;   // could not connect to WHM server
-  const WHM_ERROR_AUTH =       -3;   // authentication failed
-  const WHM_ERROR_CURL =       -4;   // curl not installed
-  const WHM_ERROR_VARS =       -5;   // variables not specified
-  const WHM_USERNAME_INVALID = -10;  // username contains invalid characters
-  const WHM_USERNAME_TAKEN =   -11;  // username already taken
-  const WHM_USERNAME_TOOLONG = -12;  // username is too long (max is 8 char)
-  const WHM_DOMAIN_INVALID =   -20;  // domain is malformed
-  const WHM_DOMAIN_TAKEN =     -21;  // domain is already taken
-  const WHM_EMAIL_INVALID =    -30;  // email is invalid
-  const WHM_PASSWORD_INVALID = -40;  // password is invalid
-
-  // other constants
-  const WHM_STANDARD_PORT =   2086;  // port to access WHM insecurely on
-  const WHM_SECURE_PORT =     2087;  // port to access WHM securely on
-  const WHM_MAX_USERNAME_LEN =   8;  // maximum user name length
-  const WHM_MAX_PASSWORD_LEN =   6;  // maximum password length
-
+  // Successful return value.
+  const WHM_SUCCESS = 1;
+  // Generic error.
+  const WHM_ERROR = -1;
+  // Could not connect to WHM server.
+  const WHM_ERROR_CONNECT =  -2;
+  // Authentication failed.
+  const WHM_ERROR_AUTH = -3;
+  // Curl not installed.
+  const WHM_ERROR_CURL = -4;
+  // Variables not specified.
+  const WHM_ERROR_VARS = -5;
+  // Username contains invalid characters.
+  const WHM_USERNAME_INVALID = -10;
+  // Username already taken.
+  const WHM_USERNAME_TAKEN = -11;
+  // Username is too long (max is 8 chars).
+  const WHM_USERNAME_TOOLONG = -12;
+  // Domain is malformed.
+  const WHM_DOMAIN_INVALID = -20;
+  // Domain is already taken.
+  const WHM_DOMAIN_TAKEN = -21;
+  // Email is invalid.
+  const WHM_EMAIL_INVALID = -30;
+  // Password is invalid.
+  const WHM_PASSWORD_INVALID = -40;
+  // Port to access WHM insecurely on.
+  const WHM_STANDARD_PORT = 2086;
+  // Port to access WHM securely on.
+  const WHM_SECURE_PORT = 2087;
+  // Maximum user name length.
+  const WHM_MAX_USERNAME_LEN = 8;
+  // Maximum password length.
+  const WHM_MAX_PASSWORD_LEN = 6;
 }
 
 /**
@@ -241,28 +257,28 @@ function whm_available_languages() {
  */
 function whm_create_account($user, $domain, $options = array()) {
   $rv = whm_check_username($user);
-  if ($rv !== WHM_Constant::WHM_SUCCESS) {
+  if ($rv !== WHMConstant::WHM_SUCCESS) {
     return $rv;
   }
   $rv = whm_check_domain($domain);
-  if ($rv !== WHM_Constant::WHM_SUCCESS) {
+  if ($rv !== WHMConstant::WHM_SUCCESS) {
     return $rv;
   }
   if ($options['contactemail']) {
     $rv = whm_check_email($options['contactemail']);
-    if ($rv !== WHM_Constant::WHM_SUCCESS) {
+    if ($rv !== WHMConstant::WHM_SUCCESS) {
       return $rv;
     }
   }
   if ($options['pass']) {
     $rv = whm_check_password($options['pass']);
-    if ($rv !== WHM_Constant::WHM_SUCCESS) {
+    if ($rv !== WHMConstant::WHM_SUCCESS) {
       return $rv;
     }
   }
   if ($options['plan']) {
     $rv = whm_check_plan($options['plan']);
-    if ($rv !== WHM_Constant::WHM_SUCCESS) {
+    if ($rv !== WHMConstant::WHM_SUCCESS) {
       return $rv;
     }
   }
@@ -274,7 +290,7 @@ function whm_create_account($user, $domain, $options = array()) {
 
   $result = _whm_command('createacct', $options);
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
   return t($result['result'][0]['statusmsg']);
 }
@@ -289,16 +305,16 @@ function whm_create_account($user, $domain, $options = array()) {
  */
 function whm_change_password($user, $pass) {
   $rv = whm_check_password($pass);
-  if ($rv === WHM_Constant::WHM_SUCCESS) {
+  if ($rv === WHMConstant::WHM_SUCCESS) {
     $result = _whm_command('passwd', array('user' => $user, 'pass' => $pass));
     if ($result['passwd'][0]['status'] == 1) {
-      return WHM_Constant::WHM_SUCCESS;
+      return WHMConstant::WHM_SUCCESS;
     }
   } 
   else {
     return $rv;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -313,9 +329,9 @@ function whm_change_password($user, $pass) {
 function whm_limit_bandwidth($user, $limit) {
   $result = _whm_command('limitbw', array('user' => $user, 'bwlimit' => $limit));
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -423,7 +439,7 @@ function whm_list_accounts($search_type = NULL, $search = NULL) {
  */
 function whm_modify_account($user, $options = array()) {
   $rv = whm_check_username($options['newuser']);
-  if ($rv !== WHM_Constant::WHM_SUCCESS) {
+  if ($rv !== WHMConstant::WHM_SUCCESS) {
     return $rv;
   }
 
@@ -433,7 +449,7 @@ function whm_modify_account($user, $options = array()) {
 
   $result = _whm_command('modifyacct', $options);
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
   return t($result['result'][0]['statusmsg']);
 }
@@ -449,9 +465,9 @@ function whm_modify_account($user, $options = array()) {
 function whm_modify_quota($user, $quota) {
   $result = _whm_command('editquota', array('user' => $user, 'quota' => $quota));
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -465,7 +481,7 @@ function whm_account_info($user) {
   if ($result['status'] == 1) {
     return $result['acct'];
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -473,14 +489,14 @@ function whm_account_info($user) {
  */
 function whm_suspend_account($user) {
   if (empty($user)) {
-    return WHM_Constant::WHM_ERROR_VARS;
+    return WHMConstant::WHM_ERROR_VARS;
   }
   $user = urlencode($user);
   $result = _whm_command('suspendacct', array('user' => $user));
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -488,14 +504,14 @@ function whm_suspend_account($user) {
  */
 function whm_terminate_account($user) {
   if (empty($user)) {
-    return WHM_Constant::WHM_ERROR_VARS;
+    return WHMConstant::WHM_ERROR_VARS;
   }
   $user = urlencode($user);
   $result = _whm_command('removeacct', array('user' => $user));
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -503,14 +519,14 @@ function whm_terminate_account($user) {
  */
 function whm_unsuspend_account($user) {
   if (empty($user)) {
-    return WHM_Constant::WHM_ERROR_VARS;
+    return WHMConstant::WHM_ERROR_VARS;
   }
   $user = urlencode($user);
   $result = _whm_command('unsuspendacct', array('user' => $user));
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -520,15 +536,15 @@ function whm_check_username($user) {
   $user = drupal_strtolower(trim($user));
   
   // check if username is too long
-  if (drupal_strlen($user) > WHM_Constant::WHM_MAX_USERNAME_LEN) {
-    return WHM_Constant::WHM_USERNAME_TOOLONG;
+  if (drupal_strlen($user) > WHMConstant::WHM_MAX_USERNAME_LEN) {
+    return WHMConstant::WHM_USERNAME_TOOLONG;
   }
 
   // check username for non-alphanumeric characters
   $validchr = 'abcdefghijklmnopqrstuvwxyz0123456789';
   for ($i=0; $i<drupal_strlen($user); $i++) {
     if (strpos($validchr, $user[$i])===FALSE) {
-      return WHM_Constant::WHM_USERNAME_INVALID;
+      return WHMConstant::WHM_USERNAME_INVALID;
     }
   }
   
@@ -536,10 +552,10 @@ function whm_check_username($user) {
   $accts = whm_list_accounts();
   foreach ($accts as $acct) {
     if ($acct['user'] == $user) {
-      return WHM_Constant::WHM_USERNAME_TAKEN;
+      return WHMConstant::WHM_USERNAME_TAKEN;
     }
   }
-  return WHM_Constant::WHM_SUCCESS;
+  return WHMConstant::WHM_SUCCESS;
 }
 
 /**
@@ -550,26 +566,26 @@ function whm_check_domain($domain) {
   
   // check domain for valid length (between 2 and 63)
   if ( (drupal_strlen($domain)<2) || (drupal_strlen($domain)>63) ) {
-    return WHM_Constant::WHM_DOMAIN_INVALID;
+    return WHMConstant::WHM_DOMAIN_INVALID;
   }
   
   // check domain for valid characters
   $validchr = 'abcdefghijklmnopqrstuvwxyz0123456789-.';
   for ($i=0; $i<drupal_strlen($domain); $i++) {
     if (strpos($validchr, $domain[$i]) === FALSE) {
-      return WHM_Constant::WHM_DOMAIN_INVALID;
+      return WHMConstant::WHM_DOMAIN_INVALID;
     }
   }
 
   // check that domain has at least one period
   $dot = strpos($domain, '.');
   if ($dot === FALSE) {
-    return WHM_Constant::WHM_DOMAIN_INVALID;
+    return WHMConstant::WHM_DOMAIN_INVALID;
   }
   
   // check that domain does not begin or end with a hyphen or period
   if ( ($domain[0]=='.') || ($domain[0]=='-') || ($domain[$dot-1]=='.') || ($domain[$dot-1]=='-') ) {
-    return WHM_Constant::WHM_DOMAIN_INVALID;
+    return WHMConstant::WHM_DOMAIN_INVALID;
   }
   
   // if domain begins with 'www.' strip subdomain
@@ -581,10 +597,10 @@ function whm_check_domain($domain) {
   $accts = whm_list_accounts();
   foreach ($accts as $acct) {
     if ($acct['domain'] == $domain) {
-      return WHM_Constant::WHM_DOMAIN_TAKEN;
+      return WHMConstant::WHM_DOMAIN_TAKEN;
     }
   }
-  return WHM_Constant::WHM_SUCCESS;
+  return WHMConstant::WHM_SUCCESS;
 }
 
 /**
@@ -594,35 +610,35 @@ function whm_check_email($mail) {
   $mail = drupal_strtolower(trim($mail));
   $pos = strpos($mail, '@');
   if ( ($pos===FALSE) || ($pos===0) ) {
-    return WHM_Constant::WHM_EMAIL_INVALID;
+    return WHMConstant::WHM_EMAIL_INVALID;
   }
 
   $user = drupal_substr($mail, 0, $pos);
   $validchr = "abcdefghijklmnopqrstuvwxyz0123456789!#$%^&*-=_+?{}|~.";
   for ($i=0; $i<drupal_strlen($user); $i++) {
     if (strpos($validchr, $user[$i])===FALSE) {
-      return WHM_Constant::WHM_EMAIL_INVALID;
+      return WHMConstant::WHM_EMAIL_INVALID;
     }
   }
   if ( ($user[0]=='.') || ($user[drupal_strlen($user)-1]=='.') ) {
-    return WHM_Constant::WHM_EMAIL_INVALID;
+    return WHMConstant::WHM_EMAIL_INVALID;
   }
 
   $domain = drupal_substr($mail, $pos+1);
-  if (whm_check_domain($domain) !== WHM_Constant::WHM_SUCCESS) {
-    return WHM_Constant::WHM_EMAIL_INVALID;
+  if (whm_check_domain($domain) !== WHMConstant::WHM_SUCCESS) {
+    return WHMConstant::WHM_EMAIL_INVALID;
   }
-  return WHM_Constant::WHM_SUCCESS;
+  return WHMConstant::WHM_SUCCESS;
 }
 
 /**
  * Check password for allowed characters.
  */
 function whm_check_password($pass) {
-  if (drupal_strlen($pass) < WHM_Constant::WHM_MAX_PASSWORD_LEN) {
-    return WHM_Constant::WHM_PASSWORD_INVALID;
+  if (drupal_strlen($pass) < WHMConstant::WHM_MAX_PASSWORD_LEN) {
+    return WHMConstant::WHM_PASSWORD_INVALID;
   }
-  return WHM_Constant::WHM_SUCCESS;
+  return WHMConstant::WHM_SUCCESS;
 }
 
 /**
@@ -633,11 +649,11 @@ function whm_check_plan($plan) {
   $plans = whm_list_plans();
   foreach ($plans as $plan_data) {
     if ($plan_data['name'] == $plan) {
-      return WHM_Constant::WHM_SUCCESS;
+      return WHMConstant::WHM_SUCCESS;
       break;
     }
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -659,7 +675,7 @@ function whm_plan_info($plan) {
       return $result;
     }
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 function whm_create_plan($name, $options = array()) {
@@ -668,7 +684,7 @@ function whm_create_plan($name, $options = array()) {
   ) + $options;
   $result = _whm_command('addpkg', $options);
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
   return t($result['result'][0]['statusmsg']);
 }
@@ -679,20 +695,20 @@ function whm_modify_plan($name, $options = array()) {
   ) + $options;
   $result = _whm_command('editpkg', $options);
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
   return t($result['result'][0]['statusmsg']);
 }
 
 function whm_delete_plan($plan_name) {
   if (empty($plan_name)) {
-    return WHM_Constant::WHM_ERROR_VARS;
+    return WHMConstant::WHM_ERROR_VARS;
   }
   $result = _whm_command('killpkg', array('pkg' => urlencode($plan_name)));
   if ($result['result'][0]['status'] == 1) {
-    return WHM_Constant::WHM_SUCCESS;
+    return WHMConstant::WHM_SUCCESS;
   }
-  return WHM_Constant::WHM_ERROR;
+  return WHMConstant::WHM_ERROR;
 }
 
 /**
@@ -726,7 +742,7 @@ function _whm_command($command, $args = array()) {
   $whmauthkey = variable_get('whm_authkey', '');
 
   if (empty($host) || empty($whmuser) || empty($whmauthkey)) {
-    return WHM_Constant::WHM_ERROR_VARS;
+    return WHMConstant::WHM_ERROR_VARS;
   }
 
   $headers = _whm_build_command_headers();
@@ -738,7 +754,7 @@ function _whm_command($command, $args = array()) {
   $response = drupal_http_request($url, $options = array('headers' => $headers));
   watchdog('whm', "Resolving URL $url returned status code $response->code.", NULL, WATCHDOG_DEBUG);
   if ($response->code == "401") {
-    return WHM_Constant::WHM_ERROR_AUTH;
+    return WHMConstant::WHM_ERROR_AUTH;
   }
   else {
     $data = json_decode($response->data, TRUE);
@@ -749,8 +765,8 @@ function _whm_command($command, $args = array()) {
 
 function _whm_build_command_url($command, $args = array()) {
   $host = variable_get('whm_hostname', '');
-  $port = variable_get('whm_port', WHM_Constant::WHM_STANDARD_PORT);
-  $protocol = $port == WHM_Constant::WHM_SECURE_PORT ? 'https' : 'http';
+  $port = variable_get('whm_port', WHMConstant::WHM_STANDARD_PORT);
+  $protocol = $port == WHMConstant::WHM_SECURE_PORT ? 'https' : 'http';
   $url = "$protocol://$host:$port/json-api/$command";
   if (count($args) > 0) {
     $url .= '?';

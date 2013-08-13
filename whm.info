@@ -1,6 +1,0 @@
-name = WHM
-description = Provides an API to cPanel's WebHost Manager (WHM).
-package = Hosting
-core = 7.x
-php = 5.2
-

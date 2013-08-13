@@ -1086,7 +1086,7 @@ function whm_ui_confirm_delete_plan($form, &$form_state, $plan_name) {
     'admin/whm/plans/list',
     t('This will delete the selected plan/package from the WHM server and cannot be undone, be certain you are absolutely sure!'),
     t('Delete'),
-    t('Cancel'),
+    t('Cancel')
   );
 }
 

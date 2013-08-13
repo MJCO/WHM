@@ -627,7 +627,7 @@ function whm_ui_list_plans_form() {
 }
 
 /**
- * Definition for the WHM account form.
+ * Definition for the WHM Plan form.
  */
 function _whm_ui_plan_form(&$form_state = NULL) {
   $form['plan']['name'] = array(
@@ -775,7 +775,7 @@ function whm_ui_create_plan_form() {
 }
 
 /**
- * Validation for the plan form.
+ * Validation for the create plan form.
  */
 function whm_ui_create_plan_form_validate($form_id, &$form_values) {
   $whmuser = variable_get('whm_username', '');
@@ -783,7 +783,7 @@ function whm_ui_create_plan_form_validate($form_id, &$form_values) {
 }
 
 /**
- * Submit processing for the plan form.
+ * Submit processing for the create plan form.
  */
 function whm_ui_create_plan_form_submit($form_id, $form_values) {
   $options = $form_values['values'];
@@ -798,39 +798,44 @@ function whm_ui_create_plan_form_submit($form_id, $form_values) {
     drupal_set_message(t('Successfully created plan %plan',
       array(
         '%plan' => $form_values['values']['name'],
-        )
+      )
     ));
     return 'admin/whm/plans/list';
   }
   else {
-    $error = t('An error occured while trying to create the new account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv', array('!rv' => $rv)); 
+    $error = t('An error occured while trying to create the new account. Please check the specified values and try again.') . '<br />' . t('The WHM server responded with: !rv', array('!rv' => $rv));
     form_set_error('plan', $error);
   }
 }
 
-
+/**
+ * Definition for the WHM Edit Plan form.
+ */
 function whm_ui_edit_plan_form($form, &$form_state, $plan) {
-
   $res = whm_plan_info($plan);
   $plan_data = $res;
   if ($plan_data['IP'] == 'y') {
     $ip = 1;
-  } else {
+  }
+  else {
     $ip = 0;
   }
   if ($plan_data['HASSHELL'] == 'y') {
     $hasshell = 1;
-  } else {
+  }
+  else {
     $hasshell = 0;
   }
   if ($plan_data['FRONTPAGE'] == 'y') {
     $frontpage = 1;
-  } else {
+  }
+  else {
     $frontpage = 0;
   }
   if ($plan_data['CGI'] == 'y') {
     $cgi = 1;
-  } else {
+  }
+  else {
     $cgi = 0;
   }
   $current_state = array(
@@ -852,7 +857,7 @@ function whm_ui_edit_plan_form($form, &$form_state, $plan) {
       'cpmod' => $plan_data['CPMOD'],
       'featurelist' => $plan_data['FEATURELIST'],
       'language' => $plan_data['LANG'],
-    )
+    ),
   );
   $form_state['values'] = array_merge($current_state['values'], $form_state['input']);
 
@@ -946,11 +951,17 @@ function whm_ui_edit_plan_form($form, &$form_state, $plan) {
   return $form;
 }
 
+/**
+ * Validation for the edit plan form.
+ */
 function whm_ui_edit_plan_form_validate($form_id, &$form_values) {
   $whmuser = variable_get('whm_username', '');
   $form_values['values']['name'] = $whmuser . '_' . $form_values['values']['name']; 
 }
 
+/**
+ * Submit processing for the edit plan form.
+ */
 function whm_ui_edit_plan_form_submit($form, &$form_state) {
   $new_name = $form_state['values']['name'];
   $current_name = $form_state['values']['current_name'];
@@ -1059,7 +1070,7 @@ function whm_ui_edit_plan_form_submit($form, &$form_state) {
 }
 
 /**
- * Definition for the plan deletion form.
+ * Definition for the WHM Plan Deletion form.
  */
 function whm_ui_confirm_delete_plan($form, &$form_state, $plan_name) {
   $form['_whm_plan'] = array('#type' => 'value', '#value' => $plan_name);

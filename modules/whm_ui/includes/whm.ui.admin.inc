@@ -435,16 +435,16 @@ function whm_ui_confirm_suspend_account($form, &$form_state, $account) {
   $form['_whm_account'] = array('#type' => 'value', '#value' => $account);
   return confirm_form(
     $form,
-    t('Are you sure you want to suspend the WHM account !name?', 
+    t('Are you sure you want to suspend the WHM account !name?',
       array('!name' => $account)
     ),
     'admin/whm/accounts/list',
     t('This will suspend the account on the WHM server.'),
-    t('Suspend'), 
+    t('Suspend'),
     t('Cancel')
   );
 }
-  
+
 /**
  * Submit function for the confirm form for user deletion.
  */
@@ -469,7 +469,7 @@ function whm_ui_confirm_unsuspend_account($form, &$form_state, $account) {
     ),
     'admin/whm/accounts/list',
     t('This will unsuspend the account on the WHM server.'),
-    t('Unsuspend'), 
+    t('Unsuspend'),
     t('Cancel')
   );
 }
@@ -481,7 +481,7 @@ function whm_ui_confirm_unsuspend_account_submit($form, &$form_state) {
   whm_unsuspend_account($form_state['values']['_whm_account']);
   drupal_set_message(t('WHM account %name has been unsuspended.',
     array(
-      '%name' => $form_state['values']['_whm_account']
+      '%name' => $form_state['values']['_whm_account'],
     )
   ));
 
@@ -580,6 +580,9 @@ function whm_ui_filter_form() {
   return $form;
 }
 
+/**
+ * Definition for the WHM List Plans form.
+ */
 function whm_ui_list_plans_form() {
   $user_can_delete = user_access('delete whm plan');
   $user_can_edit = user_access('edit whm plan');
@@ -595,12 +598,10 @@ function whm_ui_list_plans_form() {
     foreach ($plans as $plan) {
       $row = array(
         _whm_theme_plan_name($plan['name']),
-        
       );
       if ($user_can_delete) {
         $operations = l(t('Delete'), "admin/whm/plans/plan/{$plan['name']}/delete");
       }
-      
       if ($user_can_edit) {
         $operations .= ' ' . l(t('Edit'), "admin/whm/plans/plan/{$plan['name']}/edit");
       }
@@ -614,10 +615,12 @@ function whm_ui_list_plans_form() {
     'header' => $header,
     'rows' => $rows,
     'attributes' => array(),
-    'sticky' => true, // Table header will be sticky
+    // Table header will be sticky.
+    'sticky' => TRUE,
     'caption' => "",
     'colgroups' => array(),
-    'empty' => t('No plans found. Check WHM settings.') // The message to be displayed if table is empty
+    // The message to be displayed if table is empty.
+    'empty' => t('No plans found. Check WHM settings.'),
     )
   );
   return $output; 

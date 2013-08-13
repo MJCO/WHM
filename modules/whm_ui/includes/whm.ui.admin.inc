@@ -250,12 +250,12 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
   $plan = $form_values['values']['plan'];
 
   $rv = whm_create_account($user, $domain, array(
-    'contactemail' => $email, 
-    'pass' => $pwd, 
-    'plan' => $plan
+    'contactemail' => $email,
+    'pass' => $pwd,
+    'plan' => $plan,
   ));
   if ($rv === WHMConstant::WHM_SUCCESS) {
-    drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />', 
+    drupal_set_message(t('Successfully created new account:<br />Username: <i>%user</i><br />Domain: <i>%domain</i><br />Plan type: <i>%plan</i><br />',
     array(
       '%user' => $user,
       '%domain' => $domain,
@@ -271,16 +271,21 @@ function whm_ui_create_account_form_submit($form_id, &$form_values) {
   }
 }
 
+/**
+ * Definition for the WHM Edit Account form.
+ */
 function whm_ui_edit_account_form($form, &$form_state, $account) {
 
   $res = whm_account_info($account);
   $account_data = $res[0];
-  $current_state = array('values' => array(
-    'user' => $account_data['user'],
-    'domain' => $account_data['domain'],
-    'email' => $account_data['email'],
-    'plan' => $account_data['plan'],
-  ));
+  $current_state = array(
+    'values' => array(
+      'user' => $account_data['user'],
+      'domain' => $account_data['domain'],
+      'email' => $account_data['email'],
+      'plan' => $account_data['plan'],
+    ),
+  );
   $form_state['values'] = array_merge($current_state['values'], $form_state['input']);
 
   $form = _whm_ui_account_form($form_state);

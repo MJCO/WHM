@@ -14,4 +14,5 @@ function whm_uninstall() {
   variable_del('whm_username');
   variable_del('whm_authkey');
   variable_del('whm_reseller');
+  variable_del('whm_connected');
 }

@@ -11,7 +11,16 @@ _whm_include('whm.api');
  * Implements hook_permission().
  */
 function whm_permission() {
-  return array('administer whm settings');
+  return array(
+    'administer whm' => array(
+      'title' => t('Administer WHM module'),
+      'description' => t('Can access WHM administration section.'),
+    ),
+    'administer whm settings' => array(
+      'title' => t('Administer WHM settings'),
+      'description' => t('Can administer WHM settings.'),
+    ),
+  );
 }
 
 /**
@@ -20,10 +29,9 @@ function whm_permission() {
 function whm_menu() {
   $items['admin/whm'] = array(
     'title' => 'WHM',
-    'description' => 'Configure the Web Hosting Manager integration',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('whm_admin_settings'),
-    'access arguments' => array('administer whm settings'),
+    'description' => 'Web Hosting Manager integration.',
+    'page callback' => 'whm_admin_menu_block_page',
+    'access arguments' => array('administer whm'),
     'file' => 'includes/whm.admin.inc',
     'position' => 'right',
     'weight' => 6,
@@ -35,11 +43,8 @@ function whm_menu() {
     'page arguments' => array('whm_admin_settings'),
     'access arguments' => array('administer whm settings'),
     'file' => 'includes/whm.admin.inc',
-  );
-  $items['admin/whm/settings'] = array(
-    'title' => 'Settings',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
-    'weight' => -1,
+    'weight' => 0,
+    'type' => variable_get('whm_connected') == 1 ? MENU_LOCAL_TASK : MENU_DEFAULT_LOCAL_TASK,
   );
   return $items;
 }

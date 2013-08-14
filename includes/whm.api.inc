@@ -82,6 +82,14 @@ function whm_available_languages() {
 }
 
 /**
+ * This function retrieves a list of IP's configured on the server.
+ */
+function whm_main_ip() {
+  $result = _whm_command('listips');
+  return $result['result'][0]['ip'];
+}
+
+/**
  * Account functions
  */
 
@@ -403,6 +411,28 @@ function whm_modify_account($user, $options = array()) {
     return WHMConstant::WHM_SUCCESS;
   }
   return $result['result'][0]['statusmsg'];
+}
+
+/**
+ * Function to retrieve server status information.
+ */
+function whm_get_services() {
+  $result = _whm_command('servicestatus');
+  if ($result['result']['status'] == 1) {
+    return $result['service'];
+  }
+  return $result['result']['statusmsg'];
+}
+
+/**
+ * Function to retrieve service status information.
+ */
+function whm_get_service($service) {
+  $result = _whm_command('servicestatus', array('service' => $service));
+  if ($result['result']['status'] == 1) {
+    return $result['service'];
+  }
+  return $result['result']['statusmsg'];
 }
 
 /**

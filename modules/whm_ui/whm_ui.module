@@ -73,7 +73,7 @@ function whm_ui_menu() {
     'access arguments' => array('list whm accounts'),
     'file' => 'includes/whm.ui.admin.inc',
     'type' => MENU_LOCAL_TASK,
-    'weight' => 0,
+    'weight' => 3,
   );
   $items['admin/whm/accounts/list'] = array(
     'title' => 'List',
@@ -129,7 +129,7 @@ function whm_ui_menu() {
     'access arguments' => array('list whm plans'),
     'file' => 'includes/whm.ui.admin.inc',
     'type' => MENU_LOCAL_TASK,
-    'weight' => 0,
+    'weight' => 4,
   );
   $items['admin/whm/plans/list'] = array(
     'title' => 'List',

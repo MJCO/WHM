@@ -1,0 +1,5 @@
+name = WHM Overview
+description = Provides an overview of a WHM Server's status.
+package = Hosting
+dependencies[] = whm
+core = 7.x

@@ -8,10 +8,18 @@
 _whm_include('whm.api');
 
 /**
- * TODO: Implement this function.
+ * Function to replicate system_admin_menu_block_page()
  */
-function whm_admin_overview() {
+function whm_admin_menu_block_page() {
+  $item = menu_get_item('admin/whm');
+  if ($content = system_admin_menu_block($item)) {
+    return theme('admin_block_content', array('content' => $content));
+  }
+  else {
+    return t('You can not access any administrative items.');
+  }
 }
+
 
 /**
  * Definition for the settings form.
@@ -95,10 +103,6 @@ function whm_admin_settings_validate($form, &$form_state) {
   if ($form_state['values']['port'] == 2086) {
     drupal_set_message(t('You have set WHM to use an insecure port, this is not recommended but is allowed.'), 'warning');
   }
-
-  if ($form_state['values']['ignoresscert'] == 1) {
-    drupal_set_message(t('You have set WHM to ignore self signed certificates, this is not recommended but is allowed.'), 'warning');
-  }
 }
 
 /**
@@ -110,7 +114,6 @@ function whm_admin_settings_submit($form, &$form_state) {
   variable_set('whm_username', trim($form_state['values']['user']));
   variable_set('whm_authkey', trim($form_state['values']['auth']));
   variable_set('whm_port', trim($form_state['values']['port']));
-  variable_set('whm_ignoresscert', trim($form_state['value']['port']));
 
   // Test connection by listing accounts.
   $result = whm_version();
@@ -126,6 +129,8 @@ function whm_admin_settings_submit($form, &$form_state) {
   }
   elseif (!empty($result)) {
     drupal_set_message(t('A connection to WHM @%host has been successfully established.', array('%host' => $result)));
+    variable_set('whm_connected', 1);
+    menu_rebuild();
   }
   else {
     drupal_set_message(t('Unable to verify connection with WHM. Please check the settings below, and ensure that WHM is configured to allow remote access.'), 'error');

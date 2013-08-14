@@ -1,10 +1,10 @@
 ## WHM module for Drupal: WebHost Manager (WHM) Integration
 
 * Original Author: Joe Turgeon [http://arithmetric.com]
-* Current Author: Mikey O'Toole (http://mjco.ltd.uk)
+* Current Author: Mikey O'Toole [http://mjco.ltd.uk]
 * Original Sponsorship: Sundays Energy [http://sundaysenergy.com]
 * Current Sponsorship: MJCO [http://mjco.ltd.uk]
-* Licensed under GPL v3
+* Licensed under GPL v2 or later
 
 WebHost Manager (WHM) is a commercial server administration system
 that manages hosted cPanel accounts. This module provides a user and

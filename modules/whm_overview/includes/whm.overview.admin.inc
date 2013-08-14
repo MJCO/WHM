@@ -122,7 +122,7 @@ function whm_overview_status_table() {
           $monitored = '<span class="whm-overview-y">';
           $monitored .= t('Y');
           $monitored .= '</span>';
-        } 
+        }
       }
       else {
         $monitored = '<span class="whm-overview-n">';

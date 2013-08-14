@@ -8,7 +8,7 @@
 _whm_include('whm.api');
 
 /**
- * Function to replicate system_admin_menu_block_page()
+ * Function to replicate system_admin_menu_block_page().
  */
 function whm_admin_menu_block_page() {
   $item = menu_get_item('admin/whm');

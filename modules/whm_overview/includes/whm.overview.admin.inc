@@ -9,6 +9,7 @@
  * Definition for the WHM Overview page.
  */
 function whm_overview_overview_page() {
+  drupal_add_css(drupal_get_path('module', 'whm_overview') . '/css/whm.overview.css');
   $whmovrvw = '<h1>' . t('Web Host Manager Overview') . '</h1>';
   $srvrinfo = '<h2>' . t('Server Information') . '</h2>';
   $statushdng = '<h2>' . t('Status Information') . '</h2>';
@@ -82,35 +83,51 @@ function whm_overview_status_table() {
     foreach ($srvcs as $srvc) {
     if ((!empty($srvc['installed']))) {
       if ($srvc['installed'] == 1) {
-        $installed = t('Y');
+        $installed = '<span class="whm-overview-y">';
+        $installed .= t('Y');
+        $installed .= '</span>';
       }
     }
     else {
-      $installed = t('N');
+      $installed = '<span class="whm-overview-n">';
+      $installed .= t('N');
+      $installed .= '</span>';
     }
     if ((!empty($srvc['enabled']))) {
       if ($srvc['enabled'] == 1) {
-        $enabled = t('Y');
+        $enabled = '<span class="whm-overview-y">';
+        $enabled .= t('Y');
+        $enabled .= '</span>';
       }
     }
     else {
-      $enabled = t('N');
+      $enabled = '<span class="whm-overview-n">';
+      $enabled .= t('N');
+      $enabled .= '</span>';
     }
     if ((!empty($srvc['running']))) {
       if ($srvc['running'] == 1) {
-        $running = t('Y');
+        $running = '<span class="whm-overview-y">';
+        $running .= t('Y');
+        $running .= '</span>';
       }
     }
     else {
-      $running = t('N');
+      $running = '<span class="whm-overview-n">';
+      $running .= t('N');
+      $running .= '</span>';
     }
     if ((!empty($srvc['monitored']))) {
       if ($srvc['monitored'] == 1) {
-        $monitored = t('Y');  
+        $monitored = '<span class="whm-overview-y">';
+        $monitored .= t('Y');
+        $monitored .= '</span>';
       } 
     }
     else {
-      $monitored = t('N');
+      $monitored = '<span class="whm-overview-n">';
+      $monitored .= t('N');
+      $monitored .= '</span>';
     }
     $row = array(
       $srvc['display_name'],

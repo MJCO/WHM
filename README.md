@@ -1,4 +1,4 @@
-## WHM module for Drupal: WebHost Manager (WHM) Integration
+## WebHost Manager (WHM) Integration for Drupal 7
 
 * Original Author: Joe Turgeon [http://arithmetric.com]
 * Current Author: Mikey O'Toole [http://mjco.ltd.uk]
@@ -16,7 +16,7 @@ This project is not authorized or supported by cPanel. For information
 on the cPanel or WHM products, see:
 http://www.cpanel.net
 
-## Installation
+### Installation
 
 Download the latest release of this module from:
 http://drupal.org/project/whm or http://mjco.github.io/WHM
@@ -35,7 +35,7 @@ by WHM, and can be found under 'Setup Remote Access Key' in the WHM
 interface. Note: In WHM, the reseller account must be granted specific
 permission to list, create, and suspend accounts.
 
-## Features
+### Features
 
 This module enables three WHM functions through a user and programming
 interface: listing, creating, and (un)suspending accounts managed by

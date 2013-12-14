@@ -28,7 +28,7 @@ function whm_admin_root_page() {
 
   foreach ($rows as $mlid => $path) {
     // load each of the admin menu items within this local task
-    $item = menu_get_item();
+    $item = menu_get_item($path);
     if ($item['access']) {
       $items[] = $item;
     }

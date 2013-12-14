@@ -8,10 +8,42 @@
 _whm_include('whm.api');
 
 /**
+ * Build our administrative root page.
+ */
+function whm_admin_root_page() {
+  $current =  menu_get_item();
+
+  // get current MENU_LOCAL_TASK mlid
+  $current_mlid = db_select('menu_links' , 'ml')
+    ->condition('ml.link_path' , $current['path'])
+    ->fields('ml' , array('mlid'))
+    ->execute()->fetchField();
+
+  // get all menu_links where the parent link id is the current 
+  // MENU_LOCAL_TASK
+  $rows = db_select('menu_links' , 'ml')
+    ->condition('ml.plid' , $current_mlid)
+    ->fields('ml' , array('mlid', 'link_path'))
+    ->execute()->fetchAllKeyed();
+
+  foreach ($rows as $mlid => $path) {
+    // load each of the admin menu items within this local task
+    $item = menu_get_item();
+    if ($item['access']) {
+      $items[] = $item;
+    }
+  }
+
+  // return the themed block
+  return theme('admin_block_content', array('content' => $items));
+}
+
+/**
  * Function to replicate system_admin_menu_block_page().
  */
+
 function whm_admin_menu_block_page() {
-  $item = menu_get_item('admin/whm');
+  $item = menu_get_item();
   if ($content = system_admin_menu_block($item)) {
     return theme('admin_block_content', array('content' => $content));
   }
@@ -19,7 +51,6 @@ function whm_admin_menu_block_page() {
     return t('You can not access any administrative items.');
   }
 }
-
 
 /**
  * Definition for the settings form.

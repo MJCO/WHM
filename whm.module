@@ -30,7 +30,7 @@ function whm_menu() {
   $items['admin/whm'] = array(
     'title' => 'WHM',
     'description' => 'Web Hosting Manager integration.',
-    'page callback' => 'whm_admin_menu_block_page',
+    'page callback' => 'whm_admin_root_page',
     'access arguments' => array('administer whm'),
     'file' => 'includes/whm.admin.inc',
     'position' => 'right',
